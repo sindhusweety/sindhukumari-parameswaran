@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sindhukumari Parameswaran — Python Developer &amp; AI Engineer</title>
+<meta name="description" content="Portfolio of Sindhukumari Parameswaran, Python Developer and AI Engineer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #ffffff;
+    --panel: #f3f6fc;
+    --ink: #0b0f19;
+    --ink-dim: #4a5164;
+    --ink-faint: #8890a3;
+    --blue: #1547c7;
+    --blue-bright: #2f63e6;
+    --blue-pale: #e7edfb;
+    --black: #0b0f19;
+    --line: rgba(11,15,25,0.10);
+    --line-strong: rgba(11,15,25,0.18);
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --serif: 'Inter', -apple-system, sans-serif;
+    --display: 'Space Grotesk', 'JetBrains Mono', sans-serif;
+    --maxw: 920px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--blue); color:#fff;}
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--blue-bright);
+    outline-offset:3px;
+    border-radius:2px;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--blue);
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:58px;}
+  .nav-mark{font-family:var(--mono); font-size:13px; letter-spacing:0.05em; color:var(--ink-dim);}
+  .nav-mark b{color:var(--black); font-weight:700;}
+  .nav-links{display:flex; gap:26px; list-style:none; margin:0; padding:0; font-family:var(--mono); font-size:12.5px; letter-spacing:0.04em;}
+  .nav-links a{text-decoration:none; color:var(--ink-dim); transition:color .15s;}
+  .nav-links a:hover{color:var(--blue);}
+
+  /* ---------- HERO: NEURAL NETWORK ---------- */
+  header.hero{
+    position:relative;
+    padding:76px 0 60px;
+    background:var(--black);
+    color:#fff;
+    overflow:hidden;
+    isolation:isolate;
+  }
+  #stars-canvas{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    z-index:0;
+    display:block;
+  }
+  #neural-canvas{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    z-index:0;
+    display:block;
+  }
+  header.hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(11,15,25,0.15) 0%, rgba(11,15,25,0.55) 68%, var(--black) 100%);
+    z-index:1;
+    pointer-events:none;
+  }
+  header.hero .wrap{position:relative; z-index:2;}
+
+  .hero-grid{display:grid; grid-template-columns:1.35fr 0.85fr; gap:36px; align-items:center;}
+  .hero-portrait-wrap{position:relative; width:220px; height:220px; margin:0 auto; justify-self:center;}
+  .hero-portrait-ring{
+    position:absolute; inset:-14px; border-radius:50%;
+    border:1px dashed rgba(120,145,220,0.45);
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .hero-portrait-ring{animation:spin 26s linear infinite;}
+    .hero-portrait-sat{animation:spin 26s linear infinite;}
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .hero-portrait-sat{
+    position:absolute; inset:-14px; border-radius:50%;
+  }
+  .hero-portrait-sat::before{
+    content:"";
+    position:absolute; top:-3px; left:50%;
+    width:6px; height:6px; margin-left:-3px;
+    border-radius:50%;
+    background:var(--blue-bright);
+    box-shadow:0 0 8px 2px rgba(47,99,230,0.9);
+  }
+  .hero-portrait{
+    width:100%; height:100%; border-radius:50%;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.18);
+    box-shadow:0 0 0 6px rgba(11,15,25,0.4), 0 20px 50px rgba(0,0,0,0.5);
+  }
+  .hero-portrait img{width:100%; height:100%; object-fit:cover; display:block; filter:saturate(0.92) contrast(1.03);}
+
+  @media (max-width:820px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-portrait-wrap{order:-1; width:150px; height:150px; margin-bottom:8px;}
+  }
+
+  h1{
+    font-family:var(--mono); font-weight:700;
+    font-size:clamp(28px, 4.6vw, 44px);
+    line-height:1.15; letter-spacing:-0.01em; color:#fff;
+    margin:14px 0 10px;
+  }
+  .hero-sub{
+    font-family:var(--serif); font-size:clamp(17px,2.2vw,21px);
+    color:#c3c9dc; max-width:560px; margin:0 0 26px; font-style:italic;
+  }
+  .status-line{
+    font-family:var(--mono); font-size:13.5px; color:var(--blue-bright);
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16); border-radius:5px;
+    padding:10px 14px; display:inline-block; margin-bottom:30px;
+    backdrop-filter:blur(4px);
+  }
+  .status-line .prompt{color:#fff; margin-right:6px; font-weight:700;}
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono); font-size:13.5px; letter-spacing:0.03em;
+    text-decoration:none; padding:11px 20px; border-radius:4px;
+    display:inline-block; transition:transform .15s, background .15s, border-color .15s, color .15s;
+    border:1px solid transparent;
+  }
+  .btn-primary{background:var(--blue-bright); color:#fff; font-weight:600;}
+  .btn-primary:hover{transform:translateY(-1px); background:#4c78f2;}
+  .btn-ghost-dark{border-color:rgba(255,255,255,0.28); color:#fff;}
+  .btn-ghost-dark:hover{border-color:var(--blue-bright); color:var(--blue-bright);}
+  .btn-white{background:#fff; color:var(--black); font-weight:600;}
+  .btn-white:hover{transform:translateY(-1px); background:#e7edfb;}
+
+  .btn-ghost{border-color:var(--line-strong); color:var(--black);}
+  .btn-ghost:hover{border-color:var(--blue); color:var(--blue);}
+  .btn-dark{background:var(--black); color:#fff;}
+  .btn-dark:hover{transform:translateY(-1px); background:#232838;}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:62px 0; border-bottom:1px solid var(--line); position:relative; overflow:hidden;}
+  section:last-of-type{border-bottom:none;}
+  .wrap{position:relative; z-index:1;}
+  .faint-canvas{position:absolute; inset:0; width:100%; height:100%; z-index:0; opacity:0.55;}
+  .section-head{margin-bottom:36px;}
+  h2{
+    font-family:var(--mono); font-size:14px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--black); margin:6px 0 0; display:flex; align-items:center; gap:10px;
+  }
+  h2::before{content:""; width:18px; height:1px; background:var(--blue); display:inline-block;}
+  .reveal{opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:none;}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid; grid-template-columns:1fr 1.6fr; gap:44px; align-items:start;}
+  .monogram{
+    aspect-ratio:1/1; border:1px solid var(--line-strong); border-radius:8px;
+    position:relative; overflow:hidden; background:var(--black);
+  }
+  #mini-canvas{position:absolute; inset:0; width:100%; height:100%;}
+  .mg-label{position:absolute; top:16px; left:16px; letter-spacing:0.08em; color:#fff; font-family:var(--mono); font-weight:700; font-size:15px; z-index:2;}
+  .about-bio p{margin:0 0 16px; color:var(--ink);}
+  .about-bio p:last-child{margin-bottom:0;}
+  .facts{list-style:none; margin:24px 0 0; padding:18px 0 0; border-top:1px solid var(--line); font-family:var(--mono); font-size:13px; display:grid; gap:10px;}
+  .facts li{display:grid; grid-template-columns:110px 1fr; gap:12px; color:var(--ink-dim);}
+  .facts li span{color:var(--black);}
+
+  .workshot{
+    position:relative; margin-top:34px; border-radius:8px; overflow:hidden;
+    border:1px solid var(--line-strong); height:260px;
+  }
+  .workshot img{width:100%; height:100%; object-fit:cover; display:block; filter:grayscale(0.35) contrast(1.05);}
+  .workshot-overlay{
+    position:absolute; inset:0;
+    background:linear-gradient(200deg, rgba(21,71,199,0.55) 0%, rgba(11,15,25,0.75) 55%, rgba(11,15,25,0.35) 100%);
+    mix-blend-mode:multiply;
+  }
+  .workshot-caption{
+    position:absolute; left:18px; bottom:16px;
+    font-family:var(--mono); font-size:12px; letter-spacing:0.05em;
+    color:#fff;
+  }
+  @media (max-width:720px){
+    .workshot{height:190px;}
+  }
+
+  /* ---------- EXPERIENCE ---------- */
+  .exp-item{display:grid; grid-template-columns:150px 1fr; gap:22px; padding:22px 0; border-top:1px solid var(--line);}
+  .exp-item:first-child{border-top:none;}
+  .exp-period{font-family:var(--mono); font-size:12.5px; color:var(--ink-faint); letter-spacing:0.03em; padding-top:3px;}
+  .exp-role{font-family:var(--display); font-weight:600; font-size:19px; color:var(--black); margin:0 0 4px;}
+  .exp-org{font-family:var(--mono); font-size:12.5px; color:var(--blue); margin:0 0 8px;}
+  .exp-desc{color:var(--ink-dim); font-size:15px; margin:0;}
+  .exp-bullets{margin:0; padding-left:18px; color:var(--ink-dim); font-size:14.5px; display:grid; gap:5px;}
+  .exp-bullets li{padding-left:2px;}
+
+  /* ---------- WORK / TIMELINE ---------- */
+  .timeline{position:relative; padding-left:26px;}
+  .timeline::before{content:""; position:absolute; left:3px; top:6px; bottom:6px; width:1px; background:var(--line-strong);}
+  .project{position:relative; padding-bottom:38px;}
+  .project:last-child{padding-bottom:0;}
+  .project::before{
+    content:""; position:absolute; left:-26px; top:6px; width:7px; height:7px; border-radius:50%;
+    background:var(--blue); box-shadow:0 0 0 4px #fff, 0 0 0 5px var(--line-strong);
+  }
+  .project-tag{font-family:var(--mono); font-size:11.5px; letter-spacing:0.08em; color:var(--blue); text-transform:uppercase; margin-bottom:6px; display:block;}
+  .project h3{font-family:var(--display); font-weight:600; font-size:21px; margin:0 0 8px; color:var(--black);}
+  .project p{margin:0; color:var(--ink-dim); font-size:15.5px; max-width:640px;}
+
+  /* ---------- CALLOUT ---------- */
+  .callout{
+    background:var(--black); color:#fff; border-radius:8px; padding:26px 28px;
+    display:flex; align-items:center; gap:20px; margin-top:8px;
+    position:relative; overflow:hidden;
+  }
+  #callout-canvas{position:absolute; inset:0; width:100%; height:100%; z-index:0;}
+  .callout-content{position:relative; z-index:1; display:flex; align-items:center; gap:20px;}
+  .callout-spacer{width:64px; flex:0 0 auto;}
+  .callout p{margin:0; font-size:15px; color:#c7cde0;}
+  .callout strong{color:#fff; font-weight:600;}
+
+  /* ---------- SKILLS ---------- */
+  .skill-groups{display:grid; gap:26px;}
+  .skill-group-label{font-family:var(--mono); font-size:12px; letter-spacing:0.08em; color:var(--ink-faint); text-transform:uppercase; margin-bottom:10px; display:block;}
+  .chips{display:flex; flex-wrap:wrap; gap:9px;}
+  .chip{font-family:var(--mono); font-size:13px; border:1px solid var(--line-strong); border-radius:20px; padding:6px 14px; color:var(--ink-dim); position:relative;}
+  .chip::before{content:""; display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--blue); margin-right:8px; vertical-align:middle;}
+
+  /* ---------- INTERESTS ---------- */
+  .interests-lead{color:var(--ink-dim); margin:-20px 0 34px; max-width:600px;}
+  .interests-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .interest-card{
+    background:var(--black); color:#fff; border-radius:10px; overflow:hidden;
+    position:relative; display:flex; flex-direction:column;
+  }
+  .interest-card .ic-canvas-wrap{position:relative; height:150px;}
+  .interest-card canvas{position:absolute; inset:0; width:100%; height:100%; display:block;}
+  .interest-card .ic-body{padding:18px 20px 22px; position:relative; z-index:1;}
+  .interest-card .ic-tag{font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--blue-bright); display:block; margin-bottom:6px;}
+  .interest-card h3{font-family:var(--display); font-weight:600; font-size:18px; margin:0 0 8px; color:#fff;}
+  .interest-card p{margin:0; font-size:14px; color:#b7bdd2; line-height:1.55;}
+
+  .interests-slider{width:100%; overflow:hidden; padding:4px 0; -webkit-mask-image:linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image:linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);}
+  .interests-track{display:flex; gap:18px; width:max-content;}
+  @media (prefers-reduced-motion: no-preference){
+    .interests-track{animation:slide-interests 34s linear infinite;}
+    .interests-slider:hover .interests-track{animation-play-state:paused;}
+  }
+  @keyframes slide-interests{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  .interests-track .interest-card{width:min(80vw, 330px); flex:0 0 auto;}
+
+  .gear-wrap{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:6px;}
+  .gear{color:rgba(120,145,220,0.85);}
+  @media (prefers-reduced-motion: no-preference){
+    .gear-a{animation:spin 9s linear infinite;}
+    .gear-b{animation:spin 12s linear infinite reverse;}
+  }
+
+  @media (max-width:820px){
+    .interests-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- SLIDER (Gallery) ---------- */
+  .slider{width:100%; overflow:hidden; padding:6px 0 4px; -webkit-mask-image:linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); mask-image:linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);}
+  .slider-track{display:flex; gap:18px; width:max-content;}
+  @media (prefers-reduced-motion: no-preference){
+    .slider-track{animation:slide 26s linear infinite;}
+    .slider:hover .slider-track{animation-play-state:paused;}
+  }
+  @keyframes slide{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  .slider-item{
+    flex:0 0 auto; width:min(78vw, 380px); height:260px;
+    border-radius:10px; overflow:hidden; border:1px solid var(--line-strong);
+  }
+  .slider-item img{width:100%; height:100%; object-fit:cover; display:block;}
+  @media (max-width:600px){
+    .slider-item{height:200px;}
+  }
+
+  /* ---------- CONTACT ---------- */
+  .contact-inner{display:flex; flex-direction:column; align-items:flex-start; gap:22px;}
+  .contact-inner p{color:var(--ink-dim); max-width:520px; margin:0;}
+  .contact-links{display:flex; gap:14px; flex-wrap:wrap;}
+
+  footer{
+    padding:28px 0 46px; font-family:var(--mono); font-size:12px; color:var(--ink-faint);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+
+  @media (max-width:720px){
+    .about-grid{grid-template-columns:1fr;}
+    .monogram{max-width:200px; margin-bottom:6px; height:200px;}
+    .facts li{grid-template-columns:90px 1fr;}
+    .nav-links{gap:16px;}
+    .callout-content{flex-direction:column; align-items:flex-start;}
+    .exp-item{grid-template-columns:1fr; gap:6px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="nav-mark"><b>SK</b>/Parameswaran</span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#interests">Interests</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <canvas id="stars-canvas" aria-hidden="true"></canvas>
+  <canvas id="neural-canvas" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Python Developer — AI Engineer</span>
+        <h1>Sindhukumari Parameswaran</h1>
+        <p class="hero-sub">I build systems that turn signals into understanding — from spiking neural networks to on-device translation.</p>
+        <div class="status-line"><span class="prompt">&gt;</span>currently building Live Chat Translator — an on-device chat translation overlay</div>
+        <div class="cta-row">
+          <a href="#work" class="btn btn-primary">See the work</a>
+          <a href="#contact" class="btn btn-white">Get in touch</a>
+          <a href="https://github.com/sindhusweety" class="btn btn-ghost-dark" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+      <div class="hero-portrait-wrap">
+        <div class="hero-portrait-ring" aria-hidden="true"></div>
+        <div class="hero-portrait-sat" aria-hidden="true"></div>
+        <div class="hero-portrait">
+          <img src="images/profile_pic.png" alt="Portrait of Sindhukumari Parameswaran">
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">01</span>
+      <h2>About</h2>
+    </div>
+    <div class="about-grid reveal">
+      <div class="monogram">
+        <canvas id="mini-canvas" aria-hidden="true"></canvas>
+        <span class="mg-label">SK</span>
+      </div>
+      <div class="about-bio">
+        <p>Six-plus years of shipping software — backend APIs, full-stack products, and trained models — across a handful of companies since I graduated in 2015. I currently work as a Python developer and AI engineer, where the job usually means moving between plain Python services and the ML systems sitting behind them.</p>
+        <p>I'm drawn to problems where a signal has to be turned into something a person can act on: a spike pattern into a diagnosis, a sentence into another language, a resume into a match. Most of what I build sits at that translation layer.</p>
+        <ul class="facts">
+          <li>Role <span>Python Developer &amp; AI Engineer, Neurolabs Innovations Pvt Ltd</span></li>
+          <li>Focus <span>Python, ML/AI systems, full-stack development</span></li>
+          <li>Education <span>B.Tech, Information Technology — Vivekanandha College of Engineering for Women (2011–2015)</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="workshot reveal">
+      <img src="images/coverpic_laptop.png" alt="Sindhukumari working at her desk">
+      <div class="workshot-overlay"></div>
+      <span class="workshot-caption">// at the desk, mid-build</span>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <canvas id="exp-canvas" class="faint-canvas" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">02</span>
+      <h2>Experience</h2>
+    </div>
+    <div class="reveal">
+      <div class="exp-item">
+        <span class="exp-period">Nov 2024 — Present</span>
+        <div>
+          <p class="exp-role">Python Developer</p>
+          <p class="exp-org">Neurolabs Innovations Pvt Ltd — Project TRAI</p>
+          <ul class="exp-bullets">
+            <li>Built a MAC address spoofing detection system using Jaccard similarity to flag unauthorized network access.</li>
+            <li>Designed a trust-scoring engine that compares incoming MAC addresses against a trusted database.</li>
+            <li>Built and maintained the AP Trust Level database behind the similarity models.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-item">
+        <span class="exp-period">Aug 2018 — Mar 2021</span>
+        <div>
+          <p class="exp-role">Engineer (R&amp;D)</p>
+          <p class="exp-org">ORBAI</p>
+          <ul class="exp-bullets">
+            <li>Legal AI System — built with a team of 3 to predict legal outcomes and auto-generate filing documents, using Law Stats, NLP, and Legalese, deployed on AWS.</li>
+            <li>NeuroCAD SNN Tool — a GUI simulating human brain processes with spiking neural networks, with 2D Gaussian image filtering and Perlin-noise video processing.</li>
+            <li>Presented NeuroCAD at the NVIDIA GTC Conference, March 2019.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="exp-item">
+        <span class="exp-period">Jun 2017 — Jun 2018</span>
+        <div>
+          <p class="exp-role">Software Developer</p>
+          <p class="exp-org">FuGenx Technologies Pvt Ltd — USM AI Recruitment Platform</p>
+          <ul class="exp-bullets">
+            <li>Built with a team of 4: automated resume parsing using Stanford NER to extract name, email, phone, and skills.</li>
+            <li>Built a Gensim-based candidate-ranking model and shipped it to production.</li>
+            <li>Also built a recruiter chatbot on Google Dialogflow and contributed to an employee management system.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">03</span>
+      <h2>Work</h2>
+    </div>
+    <p class="reveal" style="color:var(--ink-dim); margin-top:-20px; margin-bottom:34px; max-width:560px;">Every project below is a pulse on the same line — some shipped to production, one still open-source and growing.</p>
+
+    <div class="timeline reveal">
+      <div class="project">
+        <span class="project-tag">Open Source · In Progress</span>
+        <h3>Live Chat Translator</h3>
+        <p>An on-device overlay that translates chats in WhatsApp, Snapchat, and Messenger without sending a word to a server. The core runs on Python and Argos Translate, wrapped in platform-specific shells — Kotlin and Chaquopy for Android, keyboard and share extensions for iOS, PyQt6 with OCR for desktop, and a Chrome extension for the web. The monorepo, translation core, CI, and Android scaffold are done; right now I'm testing a two-stage pipeline that runs romanized Hindi through IndicXlit before handing it off to Argos Translate for Hinglish support.</p>
+      </div>
+      <div class="project">
+        <span class="project-tag">Conference Talk · NVIDIA GTC, March 2019</span>
+        <h3>NeuroCAD SNN Tool</h3>
+        <p>Built at ORBAI — a GUI tool simulating human brain processes with spiking neural networks, using 2D Gaussian filtering for images and Perlin noise for video. Presented at NVIDIA's GTC conference.</p>
+      </div>
+      <div class="project">
+        <span class="project-tag">ORBAI · R&amp;D, 2018–2021</span>
+        <h3>Legal AI System</h3>
+        <p>Built with a team of 3 to predict legal outcomes and auto-generate filing documents, using Law Stats, NLP, and Legalese frameworks, deployed on AWS.</p>
+      </div>
+      <div class="project">
+        <span class="project-tag">FuGenx Technologies · 2017–2018</span>
+        <h3>USM AI Recruitment Platform</h3>
+        <p>Automated resume parsing with Stanford NER and a Gensim-based candidate-ranking model, plus a recruiter chatbot on Google Dialogflow.</p>
+      </div>
+      <div class="project">
+        <span class="project-tag">Neurolabs · Security · TRAI</span>
+        <h3>MAC Address Spoofing Detection</h3>
+        <p>A Jaccard-similarity engine that scores incoming MAC addresses against a trusted database to flag spoofing attempts.</p>
+      </div>
+    </div>
+
+    <div class="callout reveal">
+      <canvas id="callout-canvas" aria-hidden="true"></canvas>
+      <div class="callout-content">
+        <div class="callout-spacer"></div>
+        <p><strong>Presented at NVIDIA's GTC Conference, March 2019</strong> — NeuroCAD, a design tool for spiking neural networks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <canvas id="skills-canvas" class="faint-canvas" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">04</span>
+      <h2>Skills
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--blue); margin-left:2px;">
+          <rect x="5" y="9" width="14" height="11" rx="2"></rect>
+          <circle cx="9.5" cy="14.5" r="1.2" fill="currentColor" stroke="none"></circle>
+          <circle cx="14.5" cy="14.5" r="1.2" fill="currentColor" stroke="none"></circle>
+          <path d="M9 20v2M15 20v2"></path>
+          <path d="M12 9V5"></path>
+          <circle cx="12" cy="3.5" r="1.5"></circle>
+          <path d="M2 13h3M19 13h3"></path>
+        </svg>
+      </h2>
+    </div>
+    <div class="skill-groups reveal">
+      <div>
+        <span class="skill-group-label">Languages &amp; Frameworks</span>
+        <div class="chips">
+          <span class="chip">Python</span>
+          <span class="chip">Java</span>
+          <span class="chip">Django</span>
+          <span class="chip">Flask</span>
+        </div>
+      </div>
+      <div>
+        <span class="skill-group-label">APIs &amp; Data</span>
+        <div class="chips">
+          <span class="chip">RESTful APIs</span>
+          <span class="chip">MySQL</span>
+          <span class="chip">PostgreSQL</span>
+        </div>
+      </div>
+      <div>
+        <span class="skill-group-label">Infrastructure</span>
+        <div class="chips">
+          <span class="chip">AWS</span>
+          <span class="chip">CI/CD</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">05</span>
+      <h2>NVIDIA GTC Conference — March 2019</h2>
+    </div>
+  </div>
+  <div class="slider reveal" aria-hidden="false">
+    <div class="slider-track">
+      <div class="slider-item"><img src="images/gtc-2019-1.jpg" alt="At the ORBAI booth, NVIDIA GTC 2019"></div>
+      <div class="slider-item"><img src="images/gtc-2019-2.jpg" alt="With the ORBAI team, NVIDIA GTC 2019"></div>
+      <div class="slider-item"><img src="images/gtc-2019-3.jpg" alt="Show floor, NVIDIA GTC 2019"></div>
+      <div class="slider-item"><img src="images/gtc-2019-1.jpg" alt="" aria-hidden="true"></div>
+      <div class="slider-item"><img src="images/gtc-2019-2.jpg" alt="" aria-hidden="true"></div>
+      <div class="slider-item"><img src="images/gtc-2019-3.jpg" alt="" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<section id="interests">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">06</span>
+      <h2>Interests &amp; What's Next</h2>
+    </div>
+    <p class="interests-lead reveal">The throughline in my work is turning a signal into something that acts. Here's where I want to take that next.</p>
+  </div>
+
+  <div class="interests-slider reveal">
+    <div class="interests-track">
+      <div class="interest-card">
+        <div class="ic-canvas-wrap"><canvas id="ic-neuro-canvas"></canvas></div>
+        <div class="ic-body">
+          <span class="ic-tag">Neural Networks</span>
+          <h3>Spiking networks, still</h3>
+          <p>NeuroCAD is where this started — designing spiking neural networks and presenting the tool at NVIDIA's GTC. It's still the base I build everything else on.</p>
+        </div>
+      </div>
+
+      <div class="interest-card">
+        <div class="ic-canvas-wrap">
+          <div class="gear-wrap">
+            <svg class="gear gear-a" width="70" height="70" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm9.4 2.6l-1.9-.3a7.6 7.6 0 00-.6-1.4l1.1-1.6a.6.6 0 00-.1-.8l-1.4-1.4a.6.6 0 00-.8-.1l-1.6 1.1a7.6 7.6 0 00-1.4-.6l-.3-1.9a.6.6 0 00-.6-.5h-2a.6.6 0 00-.6.5l-.3 1.9a7.6 7.6 0 00-1.4.6L7.9 5a.6.6 0 00-.8.1L5.7 6.5a.6.6 0 00-.1.8l1.1 1.6a7.6 7.6 0 00-.6 1.4l-1.9.3a.6.6 0 00-.5.6v2a.6.6 0 00.5.6l1.9.3c.15.5.35 1 .6 1.4l-1.1 1.6a.6.6 0 00.1.8l1.4 1.4a.6.6 0 00.8.1l1.6-1.1c.45.25.9.45 1.4.6l.3 1.9a.6.6 0 00.6.5h2a.6.6 0 00.6-.5l.3-1.9c.5-.15 1-.35 1.4-.6l1.6 1.1a.6.6 0 00.8-.1l1.4-1.4a.6.6 0 00.1-.8l-1.1-1.6c.25-.45.45-.9.6-1.4l1.9-.3a.6.6 0 00.5-.6v-2a.6.6 0 00-.5-.6z"/>
+            </svg>
+            <svg class="gear gear-b" width="46" height="46" viewBox="0 0 24 24" fill="currentColor" style="margin-top:26px;">
+              <path d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm9.4 2.6l-1.9-.3a7.6 7.6 0 00-.6-1.4l1.1-1.6a.6.6 0 00-.1-.8l-1.4-1.4a.6.6 0 00-.8-.1l-1.6 1.1a7.6 7.6 0 00-1.4-.6l-.3-1.9a.6.6 0 00-.6-.5h-2a.6.6 0 00-.6.5l-.3 1.9a7.6 7.6 0 00-1.4.6L7.9 5a.6.6 0 00-.8.1L5.7 6.5a.6.6 0 00-.1.8l1.1 1.6a7.6 7.6 0 00-.6 1.4l-1.9.3a.6.6 0 00-.5.6v2a.6.6 0 00.5.6l1.9.3c.15.5.35 1 .6 1.4l-1.1 1.6a.6.6 0 00.1.8l1.4 1.4a.6.6 0 00.8.1l1.6-1.1c.45.25.9.45 1.4.6l.3 1.9a.6.6 0 00.6.5h2a.6.6 0 00.6-.5l.3-1.9c.5-.15 1-.35 1.4-.6l1.6 1.1a.6.6 0 00.8-.1l1.4-1.4a.6.6 0 00.1-.8l-1.1-1.6c.25-.45.45-.9.6-1.4l1.9-.3a.6.6 0 00.5-.6v-2a.6.6 0 00-.5-.6z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ic-body">
+          <span class="ic-tag">Robotics</span>
+          <h3>Design tool to control loop</h3>
+          <p>NeuroCAD was about designing spiking networks on screen. I want to take that same neuromorphic approach into real-time robotic control — low-power, low-latency decisions running on the machine itself.</p>
+        </div>
+      </div>
+
+      <div class="interest-card">
+        <div class="ic-canvas-wrap"><canvas id="ic-space-canvas"></canvas></div>
+        <div class="ic-body">
+          <span class="ic-tag">Space Systems</span>
+          <h3>Intelligence without a ground link</h3>
+          <p>Live Chat Translator runs entirely on-device, by design — no server round-trip. That same constraint, autonomy without constant connectivity, is exactly what onboard AI for space systems needs.</p>
+        </div>
+      </div>
+
+      <!-- duplicate set for a seamless loop -->
+      <div class="interest-card">
+        <div class="ic-canvas-wrap"><canvas id="ic-neuro-canvas-2"></canvas></div>
+        <div class="ic-body">
+          <span class="ic-tag">Neural Networks</span>
+          <h3>Spiking networks, still</h3>
+          <p>NeuroCAD is where this started — designing spiking neural networks and presenting the tool at NVIDIA's GTC. It's still the base I build everything else on.</p>
+        </div>
+      </div>
+
+      <div class="interest-card">
+        <div class="ic-canvas-wrap">
+          <div class="gear-wrap">
+            <svg class="gear gear-a" width="70" height="70" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm9.4 2.6l-1.9-.3a7.6 7.6 0 00-.6-1.4l1.1-1.6a.6.6 0 00-.1-.8l-1.4-1.4a.6.6 0 00-.8-.1l-1.6 1.1a7.6 7.6 0 00-1.4-.6l-.3-1.9a.6.6 0 00-.6-.5h-2a.6.6 0 00-.6.5l-.3 1.9a7.6 7.6 0 00-1.4.6L7.9 5a.6.6 0 00-.8.1L5.7 6.5a.6.6 0 00-.1.8l1.1 1.6a7.6 7.6 0 00-.6 1.4l-1.9.3a.6.6 0 00-.5.6v2a.6.6 0 00.5.6l1.9.3c.15.5.35 1 .6 1.4l-1.1 1.6a.6.6 0 00.1.8l1.4 1.4a.6.6 0 00.8.1l1.6-1.1c.45.25.9.45 1.4.6l.3 1.9a.6.6 0 00.6.5h2a.6.6 0 00.6-.5l.3-1.9c.5-.15 1-.35 1.4-.6l1.6 1.1a.6.6 0 00.8-.1l1.4-1.4a.6.6 0 00.1-.8l-1.1-1.6c.25-.45.45-.9.6-1.4l1.9-.3a.6.6 0 00.5-.6v-2a.6.6 0 00-.5-.6z"/>
+            </svg>
+            <svg class="gear gear-b" width="46" height="46" viewBox="0 0 24 24" fill="currentColor" style="margin-top:26px;">
+              <path d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm9.4 2.6l-1.9-.3a7.6 7.6 0 00-.6-1.4l1.1-1.6a.6.6 0 00-.1-.8l-1.4-1.4a.6.6 0 00-.8-.1l-1.6 1.1a7.6 7.6 0 00-1.4-.6l-.3-1.9a.6.6 0 00-.6-.5h-2a.6.6 0 00-.6.5l-.3 1.9a7.6 7.6 0 00-1.4.6L7.9 5a.6.6 0 00-.8.1L5.7 6.5a.6.6 0 00-.1.8l1.1 1.6a7.6 7.6 0 00-.6 1.4l-1.9.3a.6.6 0 00-.5.6v2a.6.6 0 00.5.6l1.9.3c.15.5.35 1 .6 1.4l-1.1 1.6a.6.6 0 00.1.8l1.4 1.4a.6.6 0 00.8.1l1.6-1.1c.45.25.9.45 1.4.6l.3 1.9a.6.6 0 00.6.5h2a.6.6 0 00.6-.5l.3-1.9c.5-.15 1-.35 1.4-.6l1.6 1.1a.6.6 0 00.8-.1l1.4-1.4a.6.6 0 00.1-.8l-1.1-1.6c.25-.45.45-.9.6-1.4l1.9-.3a.6.6 0 00.5-.6v-2a.6.6 0 00-.5-.6z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="ic-body">
+          <span class="ic-tag">Robotics</span>
+          <h3>Design tool to control loop</h3>
+          <p>NeuroCAD was about designing spiking networks on screen. I want to take that same neuromorphic approach into real-time robotic control — low-power, low-latency decisions running on the machine itself.</p>
+        </div>
+      </div>
+
+      <div class="interest-card">
+        <div class="ic-canvas-wrap"><canvas id="ic-space-canvas-2"></canvas></div>
+        <div class="ic-body">
+          <span class="ic-tag">Space Systems</span>
+          <h3>Intelligence without a ground link</h3>
+          <p>Live Chat Translator runs entirely on-device, by design — no server round-trip. That same constraint, autonomy without constant connectivity, is exactly what onboard AI for space systems needs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">07</span>
+      <h2>Contact
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--blue); margin-left:2px;">
+          <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(-20 12 12)"></ellipse>
+          <circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"></circle>
+        </svg>
+      </h2>
+    </div>
+    <div class="contact-inner reveal">
+      <p>Open to conversations about Python, AI systems, or the kind of on-device work Live Chat Translator is built on. The fastest way to reach me is email.</p>
+      <div class="contact-links">
+        <a href="mailto:Psindhu4sep94@gmail.com" class="btn btn-primary">Psindhu4sep94@gmail.com</a>
+        <a href="https://www.linkedin.com/in/sindhukumari-parameswaran-21b028b0/" class="btn btn-dark" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/sindhusweety" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
+    <span>© 2026 Sindhukumari Parameswaran</span>
+    <span>Built with Python in mind.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Generic neural-network canvas renderer.
+  // opts: nodeCount, linkDist, speed, nodeColor, lineColor, pulseColor, pulseRate
+  function initNetwork(canvasId, opts){
+    const canvas = document.getElementById(canvasId);
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w, h, dpr;
+    let nodes = [];
+    let pulses = [];
+
+    function resize(){
+      const rect = canvas.parentElement.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = rect.width; h = rect.height;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      seed();
+    }
+
+    function seed(){
+      nodes = [];
+      const count = opts.nodeCount;
+      for(let i=0;i<count;i++){
+        nodes.push({
+          x: Math.random()*w,
+          y: Math.random()*h,
+          vx: (Math.random()-0.5)*opts.speed,
+          vy: (Math.random()-0.5)*opts.speed,
+          r: 1.6 + Math.random()*1.8,
+          glow: 0
+        });
+      }
+      pulses = [];
+    }
+
+    function nearestLinks(){
+      const links = [];
+      for(let i=0;i<nodes.length;i++){
+        for(let j=i+1;j<nodes.length;j++){
+          const dx = nodes[i].x-nodes[j].x, dy = nodes[i].y-nodes[j].y;
+          const d = Math.sqrt(dx*dx+dy*dy);
+          if(d < opts.linkDist) links.push({a:i,b:j,dist:d});
+        }
+      }
+      return links;
+    }
+
+    function spawnPulse(links){
+      if(!links.length) return;
+      const l = links[Math.floor(Math.random()*links.length)];
+      pulses.push({a:l.a, b:l.b, t:0, speed: 0.012 + Math.random()*0.014});
+    }
+
+    let lastSpawn = 0;
+    function draw(ts){
+      ctx.clearRect(0,0,w,h);
+      const links = nearestLinks();
+
+      for(const n of nodes){
+        n.x += n.vx; n.y += n.vy;
+        if(n.x < 0 || n.x > w) n.vx *= -1;
+        if(n.y < 0 || n.y > h) n.vy *= -1;
+        if(n.glow > 0) n.glow -= 0.02;
+      }
+
+      ctx.lineWidth = 1;
+      const alphaScale = opts.lineAlphaScale || 0.5;
+      for(const l of links){
+        const a = nodes[l.a], b = nodes[l.b];
+        const alpha = (1 - l.dist/opts.linkDist) * alphaScale;
+        ctx.strokeStyle = opts.lineColor.replace('ALPHA', alpha.toFixed(3));
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+        ctx.stroke();
+      }
+
+      if(!reduceMotion && ts - lastSpawn > opts.pulseRate){
+        spawnPulse(links);
+        lastSpawn = ts;
+      }
+
+      pulses.forEach(p=>{
+        const a = nodes[p.a], b = nodes[p.b];
+        if(!a || !b) return;
+        p.t += p.speed;
+        const x = a.x + (b.x-a.x)*p.t;
+        const y = a.y + (b.y-a.y)*p.t;
+        ctx.beginPath();
+        ctx.arc(x,y,2.2,0,Math.PI*2);
+        ctx.fillStyle = opts.pulseColor;
+        ctx.fill();
+        if(p.t >= 1){ b.glow = 1; }
+      });
+      pulses = pulses.filter(p=>p.t < 1);
+
+      for(const n of nodes){
+        const r = n.r + n.glow*2.2;
+        ctx.beginPath();
+        ctx.arc(n.x,n.y,r,0,Math.PI*2);
+        ctx.fillStyle = n.glow > 0 ? opts.pulseColor : opts.nodeColor;
+        ctx.globalAlpha = n.glow > 0 ? 0.9 : 0.85;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      if(!reduceMotion){
+        requestAnimationFrame(draw);
+      }
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    requestAnimationFrame(draw);
+  }
+
+  function initStars(canvasId, count){
+    const canvas = document.getElementById(canvasId);
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w,h,dpr,stars=[];
+    function resize(){
+      const rect = canvas.parentElement.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio||1,2);
+      w = rect.width; h = rect.height;
+      canvas.width = w*dpr; canvas.height = h*dpr;
+      canvas.style.width = w+'px'; canvas.style.height = h+'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      stars = [];
+      for(let i=0;i<count;i++){
+        stars.push({x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.2+0.3, phase:Math.random()*Math.PI*2, speed:0.4+Math.random()*0.6});
+      }
+    }
+    function draw(ts){
+      ctx.clearRect(0,0,w,h);
+      const t = ts/1000;
+      for(const s of stars){
+        const tw = reduceMotion ? 0.7 : 0.5 + 0.5*Math.sin(t*s.speed + s.phase);
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle = 'rgba(255,255,255,'+(0.25+0.55*tw).toFixed(3)+')';
+        ctx.fill();
+      }
+      if(!reduceMotion) requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+    requestAnimationFrame(draw);
+  }
+  initStars('stars-canvas', 90);
+
+  initNetwork('neural-canvas', {
+    nodeCount: 70, linkDist: 140, speed: 0.15,
+    nodeColor: 'rgba(120,145,220,0.9)', lineColor: 'rgba(60,95,200,ALPHA)',
+    pulseColor: '#ffffff', pulseRate: 550
+  });
+
+  initNetwork('mini-canvas', {
+    nodeCount: 22, linkDist: 90, speed: 0.12,
+    nodeColor: 'rgba(120,145,220,0.9)', lineColor: 'rgba(60,95,200,ALPHA)',
+    pulseColor: '#ffffff', pulseRate: 900
+  });
+
+  initNetwork('callout-canvas', {
+    nodeCount: 26, linkDist: 100, speed: 0.1,
+    nodeColor: 'rgba(120,145,220,0.85)', lineColor: 'rgba(60,95,200,ALPHA)',
+    pulseColor: '#ffffff', pulseRate: 700
+  });
+
+  // Faint light-mode neuron texture for white sections
+  initNetwork('exp-canvas', {
+    nodeCount: 34, linkDist: 130, speed: 0.06, lineAlphaScale: 0.16,
+    nodeColor: 'rgba(21,71,199,0.25)', lineColor: 'rgba(21,71,199,ALPHA)',
+    pulseColor: '#1547c7', pulseRate: 1400
+  });
+  initNetwork('skills-canvas', {
+    nodeCount: 30, linkDist: 130, speed: 0.06, lineAlphaScale: 0.16,
+    nodeColor: 'rgba(21,71,199,0.25)', lineColor: 'rgba(21,71,199,ALPHA)',
+    pulseColor: '#1547c7', pulseRate: 1400
+  });
+
+  // Small neuron card + space/orbit card inside Interests
+  initNetwork('ic-neuro-canvas', {
+    nodeCount: 24, linkDist: 70, speed: 0.14,
+    nodeColor: 'rgba(120,145,220,0.9)', lineColor: 'rgba(60,95,200,ALPHA)',
+    pulseColor: '#ffffff', pulseRate: 500
+  });
+  initStars('ic-space-canvas', 55);
+  initNetwork('ic-neuro-canvas-2', {
+    nodeCount: 24, linkDist: 70, speed: 0.14,
+    nodeColor: 'rgba(120,145,220,0.9)', lineColor: 'rgba(60,95,200,ALPHA)',
+    pulseColor: '#ffffff', pulseRate: 500
+  });
+  initStars('ic-space-canvas-2', 55);
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+</script>
+
+</body>
+</html>
