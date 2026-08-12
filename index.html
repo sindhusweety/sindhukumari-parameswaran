@@ -702,7 +702,7 @@
 
 <script>
 (function(){
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduceMotion = false;
 
   // Generic neural-network canvas renderer.
   // opts: nodeCount, linkDist, speed, nodeColor, lineColor, pulseColor, pulseRate
@@ -1353,10 +1353,7 @@
 
     draw();
 
-    if (!reduceMotion) {
-      requestAnimationFrame(animate);
-    }
-  }
+    requestAnimationFrame(animate);
 
   window.addEventListener(
     "resize",
@@ -1365,11 +1362,7 @@
 
   resize();
 
-  if (!reduceMotion) {
-    requestAnimationFrame(animate);
-  } else {
-    draw();
-  }
+  requestAnimationFrame(animate);
 }
   
   function initStars(canvasId, count){
