@@ -1082,13 +1082,17 @@
         (n.hot ? idlePulse * 1.4 : 0);
 
       const color =
-        n.glow > 0
-          ? opts.pulseColor
-          : (
-              n.hot
-                ? hotColor
-                : opts.nodeColor
-            );
+              n.glow > 0
+                ? (
+                    Math.sin(t * 8 + n.phase) > 0
+                      ? '#ff2a00'
+                      : '#ffd000'
+                  )
+                : (
+                    n.hot
+                      ? hotColor
+                      : opts.nodeColor
+                  );
 
       if(glow){
 
@@ -1183,12 +1187,28 @@
   }
   initStars('stars-canvas', 90);
 
-  initNetwork('neural-canvas', {
-    nodeCount: 70, linkDist: 140, speed: 0.15, glow: true,
-    nodeColor: 'rgba(70,220,140,0.9)', lineColor: 'rgba(70,130,255,ALPHA)',
-    hotColor: '#ff3b3b', hotShare: 0.18,
-    pulseColor: '#ff3b3b', pulseRate: 550
-  });
+           initNetwork('neural-canvas', {
+        nodeCount: 70,
+        linkDist: 180,
+        speed: 0.25,
+        glow: true,
+      
+        nodeColor: 'rgba(70,100,255,0.9)',
+      
+        lineColor:
+          'rgba(70,130,255,ALPHA)',
+      
+        hotColor: '#ff2a00',
+      
+        hotShare: 0.12,
+      
+        pulseColor: '#ff2a00',
+      
+        // VERY FREQUENT SPIKING
+        pulseRate: 120,
+      
+        lineAlphaScale: 0.35
+      });
 
   initNetwork('mini-canvas', {
     nodeCount: 22, linkDist: 90, speed: 0.12, glow: true,
