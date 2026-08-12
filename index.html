@@ -820,38 +820,53 @@
     return links;
   }
 
+        
   function spawnPulse(links){
 
-    if(!links.length) return;
+  if(!links.length) return;
+
+  // Create multiple spikes at once
+  const spikeCount =
+    3 + Math.floor(Math.random() * 5);
+
+  for(let i = 0; i < spikeCount; i++){
 
     const l =
       links[
         Math.floor(
-          Math.random() *
-          links.length
+          Math.random() * links.length
         )
       ];
 
     pulses.push({
 
-      a:l.a,
-      b:l.b,
+      a: l.a,
+      b: l.b,
 
-      t:0,
+      t: 0,
 
+      // Faster movement
       speed:
-        0.012 +
-        Math.random() * 0.014
+        0.025 +
+        Math.random() * 0.035,
+
+      // Random spike color
+      color:
+        Math.random() > 0.5
+          ? '#ff2a00'
+          : '#ffd000'
     });
   }
+}
 
+  
   let lastSpawn = 0;
 
   function draw(ts){
 
     ctx.clearRect(0,0,w,h);
 
-    const links =
+    const links =     
       nearestLinks();
 
     const t =
@@ -936,8 +951,7 @@
     }
 
     if(
-      !reduceMotion &&
-      ts - lastSpawn > opts.pulseRate
+       ts - lastSpawn > opts.pulseRate
     ){
 
       spawnPulse(links);
@@ -970,7 +984,7 @@
         ctx.shadowBlur = 9;
 
         ctx.shadowColor =
-          opts.pulseColor;
+          p.color;
       }
 
       ctx.beginPath();
@@ -984,7 +998,7 @@
       );
 
       ctx.fillStyle =
-        opts.pulseColor;
+        p.color;
 
       ctx.fill();
 
@@ -992,9 +1006,56 @@
         ctx.shadowBlur = 0;
       }
 
-      if(p.t >= 1){
-        b.glow = 1;
-      }
+          if(p.t >= 1){
+
+  // Strong firing reaction
+  b.glow = 1;
+
+  // Chain reaction:
+  // create another spike from this neuron
+  if(Math.random() < 0.7){
+
+    const nextLinks =
+      links.filter(
+        link =>
+          link.a === p.b ||
+          link.b === p.b
+      );
+
+    if(nextLinks.length){
+
+      const next =
+        nextLinks[
+          Math.floor(
+            Math.random() *
+            nextLinks.length
+          )
+        ];
+
+      const nextTarget =
+        next.a === p.b
+          ? next.b
+          : next.a;
+
+      pulses.push({
+
+        a: p.b,
+        b: nextTarget,
+
+        t: 0,
+
+        speed:
+          0.025 +
+          Math.random() * 0.035,
+
+        color:
+          Math.random() > 0.5
+            ? '#ff2a00'
+            : '#ffd000'
+      });
+    }
+  }
+}
 
     });
 
