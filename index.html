@@ -7,7 +7,7 @@
 <meta name="description" content="Portfolio of Sindhukumari Parameswaran, Python Developer and AI Engineer.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #ffffff;
@@ -22,13 +22,15 @@
     --line: rgba(11,15,25,0.10);
     --line-strong: rgba(11,15,25,0.18);
     --mono: 'JetBrains Mono', ui-monospace, monospace;
-    --serif: 'Inter', -apple-system, sans-serif;
-    --display: 'Space Grotesk', 'JetBrains Mono', sans-serif;
-    --maxw: 920px;
+    --serif: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --maxw: 1440px;
   }
 
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
+  html, body{overflow-x:hidden; max-width:100%;}
+  img, canvas, svg{max-width:100%;}
   body{
     margin:0;
     background:var(--bg);
@@ -266,7 +268,10 @@
     position:relative; display:flex; flex-direction:column;
   }
   .interest-card .ic-canvas-wrap{position:relative; height:150px;}
+  .interest-card .ic-canvas-wrap .ic-photo{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(0.85) contrast(1.05) brightness(0.75);}
+  .interest-card .ic-canvas-wrap .ic-photo-overlay{position:absolute; inset:0; background:linear-gradient(180deg, rgba(11,15,25,0.15) 0%, rgba(11,15,25,0.65) 100%);}
   .interest-card canvas{position:absolute; inset:0; width:100%; height:100%; display:block;}
+  .interest-card .ic-credit{position:absolute; right:8px; bottom:6px; font-family:var(--mono); font-size:9.5px; color:rgba(255,255,255,0.55); z-index:2;}
   .interest-card .ic-body{padding:18px 20px 22px; position:relative; z-index:1;}
   .interest-card .ic-tag{font-family:var(--mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--blue-bright); display:block; margin-bottom:6px;}
   .interest-card h3{font-family:var(--display); font-weight:600; font-size:18px; margin:0 0 8px; color:#fff;}
@@ -355,7 +360,7 @@
         <span class="eyebrow">Python Developer — AI Engineer</span>
         <h1>Sindhukumari Parameswaran</h1>
         <p class="hero-sub">I build systems that turn signals into understanding — from spiking neural networks to on-device translation.</p>
-        <div class="status-line"><span class="prompt">&gt;</span>currently building Live Chat Translator — an on-device chat translation overlay</div>
+        <div class="status-line"><span class="prompt">&gt;</span>learning Gen AI, RAG, Agentic AI, MCP</div>
         <div class="cta-row">
           <a href="#work" class="btn btn-primary">See the work</a>
           <a href="#contact" class="btn btn-white">Get in touch</a>
@@ -366,7 +371,7 @@
         <div class="hero-portrait-ring" aria-hidden="true"></div>
         <div class="hero-portrait-sat" aria-hidden="true"></div>
         <div class="hero-portrait">
-          <img src="images/profile_pic.png" alt="Portrait of Sindhukumari Parameswaran">
+          <img src="images/profile-pic.jpg" alt="Portrait of Sindhukumari Parameswaran">
         </div>
       </div>
     </div>
@@ -376,7 +381,6 @@
 <section id="about">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">01</span>
       <h2>About</h2>
     </div>
     <div class="about-grid reveal">
@@ -385,17 +389,18 @@
         <span class="mg-label">SK</span>
       </div>
       <div class="about-bio">
-        <p>Six-plus years of shipping software — backend APIs, full-stack products, and trained models — across a handful of companies since I graduated in 2015. I currently work as a Python developer and AI engineer, where the job usually means moving between plain Python services and the ML systems sitting behind them.</p>
-        <p>I'm drawn to problems where a signal has to be turned into something a person can act on: a spike pattern into a diagnosis, a sentence into another language, a resume into a match. Most of what I build sits at that translation layer.</p>
+        <p>5+ years of experience across the full software development lifecycle — requirements gathering, design, development, implementation, and maintenance — using Python and Java. Strong hands-on experience with Django and Flask, RESTful APIs, SQL and relational databases (MySQL, Postgres), and AWS (EC2, S3). I've built and maintained CI/CD pipelines end to end, integrating Git to enforce code quality and automate releases.</p>
+        <p>Right now I'm moving deeper into Gen AI, RAG, Agent AI, Agentic AI, and MCP, alongside ML, DL, and data engineering — extending the same AI/ML foundation from NeuroCAD and the other projects below into where the field is heading next.</p>
         <ul class="facts">
           <li>Role <span>Python Developer &amp; AI Engineer, Neurolabs Innovations Pvt Ltd</span></li>
-          <li>Focus <span>Python, ML/AI systems, full-stack development</span></li>
+          <li>Focus <span>Gen AI, RAG, Agentic AI, MCP, ML/DL, Data Engineering</span></li>
           <li>Education <span>B.Tech, Information Technology — Vivekanandha College of Engineering for Women (2011–2015)</span></li>
+          <li>Achievement <span>Traveled to the USA to present NeuroCAD at NVIDIA's GTC Conference</span></li>
         </ul>
       </div>
     </div>
     <div class="workshot reveal">
-      <img src="images/coverpic_laptop.png" alt="Sindhukumari working at her desk">
+      <img src="images/workshot.jpg" alt="Sindhukumari working at her desk">
       <div class="workshot-overlay"></div>
       <span class="workshot-caption">// at the desk, mid-build</span>
     </div>
@@ -406,7 +411,6 @@
   <canvas id="exp-canvas" class="faint-canvas" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">02</span>
       <h2>Experience</h2>
     </div>
     <div class="reveal">
@@ -453,7 +457,6 @@
 <section id="work">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">03</span>
       <h2>Work</h2>
     </div>
     <p class="reveal" style="color:var(--ink-dim); margin-top:-20px; margin-bottom:34px; max-width:560px;">Every project below is a pulse on the same line — some shipped to production, one still open-source and growing.</p>
@@ -500,7 +503,6 @@
   <canvas id="skills-canvas" class="faint-canvas" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">04</span>
       <h2>Skills
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--blue); margin-left:2px;">
           <rect x="5" y="9" width="14" height="11" rx="2"></rect>
@@ -538,6 +540,19 @@
           <span class="chip">CI/CD</span>
         </div>
       </div>
+      <div>
+        <span class="skill-group-label">Currently Exploring</span>
+        <div class="chips">
+          <span class="chip">Gen AI</span>
+          <span class="chip">RAG</span>
+          <span class="chip">Agent AI</span>
+          <span class="chip">Agentic AI</span>
+          <span class="chip">MCP</span>
+          <span class="chip">ML</span>
+          <span class="chip">DL</span>
+          <span class="chip">Data Engineering</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -545,7 +560,6 @@
 <section id="gallery">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">05</span>
       <h2>NVIDIA GTC Conference — March 2019</h2>
     </div>
   </div>
@@ -564,7 +578,6 @@
 <section id="interests">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">06</span>
       <h2>Interests &amp; What's Next</h2>
     </div>
     <p class="interests-lead reveal">The throughline in my work is turning a signal into something that acts. Here's where I want to take that next.</p>
@@ -583,6 +596,9 @@
 
       <div class="interest-card">
         <div class="ic-canvas-wrap">
+          <img class="ic-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/UR16e_robot_arm.png" alt="Collaborative robot arm">
+          <div class="ic-photo-overlay"></div>
+          <span class="ic-credit">Universal Robots · CC BY-SA</span>
           <div class="gear-wrap">
             <svg class="gear gear-a" width="70" height="70" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm9.4 2.6l-1.9-.3a7.6 7.6 0 00-.6-1.4l1.1-1.6a.6.6 0 00-.1-.8l-1.4-1.4a.6.6 0 00-.8-.1l-1.6 1.1a7.6 7.6 0 00-1.4-.6l-.3-1.9a.6.6 0 00-.6-.5h-2a.6.6 0 00-.6.5l-.3 1.9a7.6 7.6 0 00-1.4.6L7.9 5a.6.6 0 00-.8.1L5.7 6.5a.6.6 0 00-.1.8l1.1 1.6a7.6 7.6 0 00-.6 1.4l-1.9.3a.6.6 0 00-.5.6v2a.6.6 0 00.5.6l1.9.3c.15.5.35 1 .6 1.4l-1.1 1.6a.6.6 0 00.1.8l1.4 1.4a.6.6 0 00.8.1l1.6-1.1c.45.25.9.45 1.4.6l.3 1.9a.6.6 0 00.6.5h2a.6.6 0 00.6-.5l.3-1.9c.5-.15 1-.35 1.4-.6l1.6 1.1a.6.6 0 00.8-.1l1.4-1.4a.6.6 0 00.1-.8l-1.1-1.6c.25-.45.45-.9.6-1.4l1.9-.3a.6.6 0 00.5-.6v-2a.6.6 0 00-.5-.6z"/>
@@ -600,7 +616,7 @@
       </div>
 
       <div class="interest-card">
-        <div class="ic-canvas-wrap"><canvas id="ic-space-canvas"></canvas></div>
+        <div class="ic-canvas-wrap"><img class="ic-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/NASA_Neutral_Buoyancy_Laboratory_Astronaut_Training.jpg" alt="NASA astronaut training in the Neutral Buoyancy Laboratory"><div class="ic-photo-overlay"></div><span class="ic-credit">NASA · Public Domain</span><canvas id="ic-space-canvas"></canvas></div>
         <div class="ic-body">
           <span class="ic-tag">Space Systems</span>
           <h3>Intelligence without a ground link</h3>
@@ -620,6 +636,9 @@
 
       <div class="interest-card">
         <div class="ic-canvas-wrap">
+          <img class="ic-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/UR16e_robot_arm.png" alt="Collaborative robot arm">
+          <div class="ic-photo-overlay"></div>
+          <span class="ic-credit">Universal Robots · CC BY-SA</span>
           <div class="gear-wrap">
             <svg class="gear gear-a" width="70" height="70" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm9.4 2.6l-1.9-.3a7.6 7.6 0 00-.6-1.4l1.1-1.6a.6.6 0 00-.1-.8l-1.4-1.4a.6.6 0 00-.8-.1l-1.6 1.1a7.6 7.6 0 00-1.4-.6l-.3-1.9a.6.6 0 00-.6-.5h-2a.6.6 0 00-.6.5l-.3 1.9a7.6 7.6 0 00-1.4.6L7.9 5a.6.6 0 00-.8.1L5.7 6.5a.6.6 0 00-.1.8l1.1 1.6a7.6 7.6 0 00-.6 1.4l-1.9.3a.6.6 0 00-.5.6v2a.6.6 0 00.5.6l1.9.3c.15.5.35 1 .6 1.4l-1.1 1.6a.6.6 0 00.1.8l1.4 1.4a.6.6 0 00.8.1l1.6-1.1c.45.25.9.45 1.4.6l.3 1.9a.6.6 0 00.6.5h2a.6.6 0 00.6-.5l.3-1.9c.5-.15 1-.35 1.4-.6l1.6 1.1a.6.6 0 00.8-.1l1.4-1.4a.6.6 0 00.1-.8l-1.1-1.6c.25-.45.45-.9.6-1.4l1.9-.3a.6.6 0 00.5-.6v-2a.6.6 0 00-.5-.6z"/>
@@ -637,7 +656,7 @@
       </div>
 
       <div class="interest-card">
-        <div class="ic-canvas-wrap"><canvas id="ic-space-canvas-2"></canvas></div>
+        <div class="ic-canvas-wrap"><img class="ic-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/NASA_Neutral_Buoyancy_Laboratory_Astronaut_Training.jpg" alt="NASA astronaut training in the Neutral Buoyancy Laboratory"><div class="ic-photo-overlay"></div><span class="ic-credit">NASA · Public Domain</span><canvas id="ic-space-canvas-2"></canvas></div>
         <div class="ic-body">
           <span class="ic-tag">Space Systems</span>
           <h3>Intelligence without a ground link</h3>
@@ -651,7 +670,6 @@
 <section id="contact">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">07</span>
       <h2>Contact
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--blue); margin-left:2px;">
           <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(-20 12 12)"></ellipse>
@@ -690,6 +708,9 @@
     let w, h, dpr;
     let nodes = [];
     let pulses = [];
+    const hotColor = opts.hotColor || null;
+    const hotShare = opts.hotShare || 0.16;
+    const glow = !!opts.glow;
 
     function resize(){
       const rect = canvas.parentElement.getBoundingClientRect();
@@ -705,13 +726,17 @@
       nodes = [];
       const count = opts.nodeCount;
       for(let i=0;i<count;i++){
+        const isHot = hotColor && Math.random() < hotShare;
         nodes.push({
           x: Math.random()*w,
           y: Math.random()*h,
           vx: (Math.random()-0.5)*opts.speed,
           vy: (Math.random()-0.5)*opts.speed,
-          r: 1.6 + Math.random()*1.8,
-          glow: 0
+          r: (isHot ? 2.1 : 1.6) + Math.random()*1.8,
+          glow: 0,
+          hot: isHot,
+          phase: Math.random()*Math.PI*2,
+          idleSpeed: 0.5 + Math.random()*0.7
         });
       }
       pulses = [];
@@ -739,6 +764,7 @@
     function draw(ts){
       ctx.clearRect(0,0,w,h);
       const links = nearestLinks();
+      const t = ts/1000;
 
       for(const n of nodes){
         n.x += n.vx; n.y += n.vy;
@@ -747,15 +773,17 @@
         if(n.glow > 0) n.glow -= 0.02;
       }
 
-      ctx.lineWidth = 1;
       const alphaScale = opts.lineAlphaScale || 0.5;
       for(const l of links){
         const a = nodes[l.a], b = nodes[l.b];
         const alpha = (1 - l.dist/opts.linkDist) * alphaScale;
         ctx.strokeStyle = opts.lineColor.replace('ALPHA', alpha.toFixed(3));
+        ctx.lineWidth = glow ? 1.3 : 1;
+        if(glow){ ctx.shadowBlur = 5; ctx.shadowColor = opts.lineColor.replace('ALPHA','0.5'); }
         ctx.beginPath();
         ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
         ctx.stroke();
+        if(glow) ctx.shadowBlur = 0;
       }
 
       if(!reduceMotion && ts - lastSpawn > opts.pulseRate){
@@ -769,22 +797,31 @@
         p.t += p.speed;
         const x = a.x + (b.x-a.x)*p.t;
         const y = a.y + (b.y-a.y)*p.t;
+        if(glow){ ctx.shadowBlur = 9; ctx.shadowColor = opts.pulseColor; }
         ctx.beginPath();
-        ctx.arc(x,y,2.2,0,Math.PI*2);
+        ctx.arc(x,y,2.4,0,Math.PI*2);
         ctx.fillStyle = opts.pulseColor;
         ctx.fill();
+        if(glow) ctx.shadowBlur = 0;
         if(p.t >= 1){ b.glow = 1; }
       });
       pulses = pulses.filter(p=>p.t < 1);
 
       for(const n of nodes){
-        const r = n.r + n.glow*2.2;
+        const idlePulse = n.hot ? (0.55 + 0.45*Math.sin(t*n.idleSpeed + n.phase)) : 0;
+        const r = n.r + n.glow*2.2 + (n.hot ? idlePulse*1.4 : 0);
+        const color = n.glow > 0 ? opts.pulseColor : (n.hot ? hotColor : opts.nodeColor);
+        if(glow){
+          ctx.shadowBlur = n.hot ? 12+idlePulse*8 : 4;
+          ctx.shadowColor = color;
+        }
         ctx.beginPath();
         ctx.arc(n.x,n.y,r,0,Math.PI*2);
-        ctx.fillStyle = n.glow > 0 ? opts.pulseColor : opts.nodeColor;
-        ctx.globalAlpha = n.glow > 0 ? 0.9 : 0.85;
+        ctx.fillStyle = color;
+        ctx.globalAlpha = n.glow > 0 ? 0.95 : (n.hot ? 0.75+idlePulse*0.25 : 0.85);
         ctx.fill();
         ctx.globalAlpha = 1;
+        if(glow) ctx.shadowBlur = 0;
       }
 
       if(!reduceMotion){
@@ -833,48 +870,48 @@
   initStars('stars-canvas', 90);
 
   initNetwork('neural-canvas', {
-    nodeCount: 70, linkDist: 140, speed: 0.15,
-    nodeColor: 'rgba(120,145,220,0.9)', lineColor: 'rgba(60,95,200,ALPHA)',
-    pulseColor: '#ffffff', pulseRate: 550
+    nodeCount: 70, linkDist: 140, speed: 0.15, glow: true,
+    nodeColor: 'rgba(70,220,140,0.9)', lineColor: 'rgba(70,130,255,ALPHA)',
+    hotColor: '#ff3b3b', hotShare: 0.18,
+    pulseColor: '#ff3b3b', pulseRate: 550
   });
 
   initNetwork('mini-canvas', {
-    nodeCount: 22, linkDist: 90, speed: 0.12,
-    nodeColor: 'rgba(120,145,220,0.9)', lineColor: 'rgba(60,95,200,ALPHA)',
-    pulseColor: '#ffffff', pulseRate: 900
+    nodeCount: 22, linkDist: 90, speed: 0.12, glow: true,
+    nodeColor: 'rgba(70,220,140,0.9)', lineColor: 'rgba(70,130,255,ALPHA)',
+    hotColor: '#ff3b3b', hotShare: 0.18,
+    pulseColor: '#ff3b3b', pulseRate: 900
   });
 
   initNetwork('callout-canvas', {
-    nodeCount: 26, linkDist: 100, speed: 0.1,
-    nodeColor: 'rgba(120,145,220,0.85)', lineColor: 'rgba(60,95,200,ALPHA)',
-    pulseColor: '#ffffff', pulseRate: 700
+    nodeCount: 26, linkDist: 100, speed: 0.1, glow: true,
+    nodeColor: 'rgba(70,220,140,0.85)', lineColor: 'rgba(70,130,255,ALPHA)',
+    hotColor: '#ff3b3b', hotShare: 0.16,
+    pulseColor: '#ff3b3b', pulseRate: 700
   });
 
   // Faint light-mode neuron texture for white sections
   initNetwork('exp-canvas', {
     nodeCount: 34, linkDist: 130, speed: 0.06, lineAlphaScale: 0.16,
-    nodeColor: 'rgba(21,71,199,0.25)', lineColor: 'rgba(21,71,199,ALPHA)',
-    pulseColor: '#1547c7', pulseRate: 1400
+    nodeColor: 'rgba(22,163,74,0.3)', lineColor: 'rgba(21,71,199,ALPHA)',
+    hotColor: '#ef4444', hotShare: 0.14,
+    pulseColor: '#ef4444', pulseRate: 1400
   });
   initNetwork('skills-canvas', {
     nodeCount: 30, linkDist: 130, speed: 0.06, lineAlphaScale: 0.16,
-    nodeColor: 'rgba(21,71,199,0.25)', lineColor: 'rgba(21,71,199,ALPHA)',
-    pulseColor: '#1547c7', pulseRate: 1400
+    nodeColor: 'rgba(22,163,74,0.3)', lineColor: 'rgba(21,71,199,ALPHA)',
+    hotColor: '#ef4444', hotShare: 0.14,
+    pulseColor: '#ef4444', pulseRate: 1400
   });
 
-  // Small neuron card + space/orbit card inside Interests
+  // Small neuron card inside Interests
   initNetwork('ic-neuro-canvas', {
-    nodeCount: 24, linkDist: 70, speed: 0.14,
-    nodeColor: 'rgba(120,145,220,0.9)', lineColor: 'rgba(60,95,200,ALPHA)',
-    pulseColor: '#ffffff', pulseRate: 500
+    nodeCount: 24, linkDist: 70, speed: 0.14, glow: true,
+    nodeColor: 'rgba(70,220,140,0.9)', lineColor: 'rgba(70,130,255,ALPHA)',
+    hotColor: '#ff3b3b', hotShare: 0.2,
+    pulseColor: '#ff3b3b', pulseRate: 500
   });
   initStars('ic-space-canvas', 55);
-  initNetwork('ic-neuro-canvas-2', {
-    nodeCount: 24, linkDist: 70, speed: 0.14,
-    nodeColor: 'rgba(120,145,220,0.9)', lineColor: 'rgba(60,95,200,ALPHA)',
-    pulseColor: '#ffffff', pulseRate: 500
-  });
-  initStars('ic-space-canvas-2', 55);
 
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
