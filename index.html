@@ -707,34 +707,24 @@
   // Generic neural-network canvas renderer.
   // opts: nodeCount, linkDist, speed, nodeColor, lineColor, pulseColor, pulseRate
 
-   function initNetwork(canvasId, opts) {
-
+      function initNetwork(canvasId, opts){
   const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
 
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
 
   let w, h, dpr;
+  let nodes = [];
+  let pulses = [];
 
-  let neurons = [];
-  let connections = [];
-  let signals = [];
+  const hotColor = opts.hotColor || null;
+  const hotShare = opts.hotShare || 0.16;
+  const glow = !!opts.glow;
 
-  let lastTime = 0;
+  function resize(){
+    const rect = canvas.parentElement.getBoundingClientRect();
 
-
-  /* =========================
-     RESIZE
-  ========================== */
-
-  function resize() {
-
-    const rect =
-      canvas.parentElement.getBoundingClientRect();
-
-    dpr =
-      Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     w = rect.width;
     h = rect.height;
@@ -742,935 +732,359 @@
     canvas.width = w * dpr;
     canvas.height = h * dpr;
 
-    canvas.style.width = w + "px";
-    canvas.style.height = h + "px";
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
 
-    ctx.setTransform(
-      dpr, 0, 0, dpr, 0, 0
-    );
+    ctx.setTransform(dpr,0,0,dpr,0,0);
 
-    createNeuralSystem();
+    seed();
   }
 
+  function seed(){
+    nodes = [];
 
-  /* =========================
-     CREATE NEURONS
-  ========================== */
+    const count = opts.nodeCount;
 
-  function createNeuralSystem() {
+    for(let i=0;i<count;i++){
 
-    neurons = [];
-    connections = [];
-    signals = [];
+      const isHot =
+        hotColor &&
+        Math.random() < hotShare;
 
-    const count =
-      opts.nodeCount || 25;
+      nodes.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
 
+        vx:
+          (Math.random() - 0.5) *
+          opts.speed,
 
-    for (let i = 0; i < count; i++) {
+        vy:
+          (Math.random() - 0.5) *
+          opts.speed,
 
-      const margin = 40;
+        r:
+          (isHot ? 2.1 : 1.6) +
+          Math.random() * 1.8,
 
-      const neuron = {
+        glow: 0,
 
-        id: i,
-
-        x:
-          margin +
-          Math.random() * (w - margin * 2),
-
-        y:
-          margin +
-          Math.random() * (h - margin * 2),
-
-        baseX: 0,
-        baseY: 0,
-
-        radius:
-          6 + Math.random() * 8,
+        hot: isHot,
 
         phase:
-          Math.random() * Math.PI * 2,
+          Math.random() *
+          Math.PI * 2,
 
-        activity: 0,
-
-        potential: 0,
-
-        threshold:
-          0.8 + Math.random() * 0.4,
-
-        refractory: 0
-      };
-
-
-      neuron.baseX = neuron.x;
-      neuron.baseY = neuron.y;
-
-      neurons.push(neuron);
+        idleSpeed:
+          0.5 +
+          Math.random() * 0.7
+      });
     }
 
+    pulses = [];
+  }
 
-    /* =========================
-       CREATE ORGANIC CONNECTIONS
+  function nearestLinks(){
 
-       Each connection uses a
-       CURVED BEZIER PATH.
-    ========================== */
+    const links = [];
 
-    for (
-      let i = 0;
-      i < neurons.length;
-      i++
-    ) {
+    for(let i=0;i<nodes.length;i++){
 
-      const nearby = [];
+      for(let j=i+1;j<nodes.length;j++){
 
-      for (
-        let j = i + 1;
-        j < neurons.length;
-        j++
-      ) {
+        const dx =
+          nodes[i].x -
+          nodes[j].x;
 
-        const a = neurons[i];
-        const b = neurons[j];
+        const dy =
+          nodes[i].y -
+          nodes[j].y;
 
-        const dx = b.x - a.x;
-        const dy = b.y - a.y;
+        const d =
+          Math.sqrt(
+            dx*dx + dy*dy
+          );
 
-        const distance =
-          Math.sqrt(dx * dx + dy * dy);
+        if(d < opts.linkDist){
 
-        if (
-          distance <
-          (opts.linkDist || 180)
-        ) {
-
-          nearby.push({
-            index: j,
-            distance
+          links.push({
+            a:i,
+            b:j,
+            dist:d
           });
 
         }
       }
+    }
 
+    return links;
+  }
 
-      nearby
-        .sort(
-          (a, b) =>
-            a.distance - b.distance
+  function spawnPulse(links){
+
+    if(!links.length) return;
+
+    const l =
+      links[
+        Math.floor(
+          Math.random() *
+          links.length
         )
-        .slice(0, 3)
-        .forEach(link => {
+      ];
 
-          const a = neurons[i];
-          const b =
-            neurons[link.index];
+    pulses.push({
 
-          const midX =
-            (a.x + b.x) / 2;
+      a:l.a,
+      b:l.b,
 
-          const midY =
-            (a.y + b.y) / 2;
+      t:0,
 
-
-          /*
-            Perpendicular direction
-            creates organic curvature.
-          */
-
-          const dx = b.x - a.x;
-          const dy = b.y - a.y;
-
-          const length =
-            Math.sqrt(
-              dx * dx + dy * dy
-            );
-
-          const perpX =
-            -dy / length;
-
-          const perpY =
-            dx / length;
-
-
-          const curve =
-            (Math.random() - 0.5) *
-            Math.min(100, length * 0.45);
-
-
-          connections.push({
-
-            from: i,
-            to: link.index,
-
-            controlX:
-              midX + perpX * curve,
-
-            controlY:
-              midY + perpY * curve,
-
-            activity: 0,
-
-            weight:
-              0.4 +
-              Math.random() * 0.6
-
-          });
-
-        });
-
-    }
-
-  }
-
-
-  /* =========================
-     BEZIER POSITION
-
-     Returns position of a
-     signal travelling along
-     a curved neural path.
-  ========================== */
-
-  function bezierPoint(
-    t,
-    p0,
-    p1,
-    p2
-  ) {
-
-    const x =
-      (1 - t) * (1 - t) * p0.x +
-      2 * (1 - t) * t * p1.x +
-      t * t * p2.x;
-
-    const y =
-      (1 - t) * (1 - t) * p0.y +
-      2 * (1 - t) * t * p1.y +
-      t * t * p2.y;
-
-    return { x, y };
-
-  }
-
-
-  /* =========================
-     FIRE NEURON
-  ========================== */
-
-  function fireNeuron(index) {
-
-    const neuron =
-      neurons[index];
-
-    if (
-      neuron.refractory > 0
-    ) return;
-
-
-    neuron.activity = 1;
-
-    neuron.potential = 0;
-
-    neuron.refractory = 450;
-
-
-    /*
-      Send signals through
-      every connected axon.
-    */
-
-    connections.forEach(
-      (connection, connectionIndex) => {
-
-        let direction = null;
-
-
-        if (
-          connection.from === index
-        ) {
-
-          direction = {
-            from: connection.from,
-            to: connection.to
-          };
-
-        }
-
-
-        if (
-          connection.to === index
-        ) {
-
-          direction = {
-            from: connection.to,
-            to: connection.from
-          };
-
-        }
-
-
-        if (direction) {
-
-          connection.activity = 1;
-
-
-          signals.push({
-
-            connectionIndex,
-
-            from: direction.from,
-
-            to: direction.to,
-
-            progress: 0,
-
-            speed:
-              0.003 +
-              Math.random() * 0.004,
-
-            strength:
-              connection.weight
-
-          });
-
-        }
-
-      }
-    );
-
-  }
-
-
-  /* =========================
-     RANDOM NEURAL ACTIVITY
-  ========================== */
-
-  function stimulateNeuron() {
-
-    const index =
-      Math.floor(
-        Math.random() *
-        neurons.length
-      );
-
-    const neuron =
-      neurons[index];
-
-
-    if (
-      neuron.refractory <= 0
-    ) {
-
-      neuron.potential +=
-        0.5 +
-        Math.random() * 0.5;
-
-    }
-
-  }
-
-
-  /* =========================
-     UPDATE
-  ========================== */
-
-  function update(dt, time) {
-
-
-    /*
-      Constant spontaneous
-      neural activity.
-    */
-
-    if (
-      Math.random() < 0.035
-    ) {
-
-      stimulateNeuron();
-
-    }
-
-
-    neurons.forEach(
-      (neuron, index) => {
-
-
-        /*
-          Subtle organic movement.
-        */
-
-        neuron.x =
-          neuron.baseX +
-          Math.sin(
-            time * 0.0004 +
-            neuron.phase
-          ) * 3;
-
-
-        neuron.y =
-          neuron.baseY +
-          Math.cos(
-            time * 0.0005 +
-            neuron.phase
-          ) * 3;
-
-
-        /*
-          Refractory period.
-        */
-
-        if (
-          neuron.refractory > 0
-        ) {
-
-          neuron.refractory -= dt;
-
-        }
-
-
-        /*
-          Membrane potential decay.
-        */
-
-        neuron.potential *=
-          Math.pow(
-            0.98,
-            dt / 16
-          );
-
-
-        /*
-          Fire at threshold.
-        */
-
-        if (
-          neuron.potential >=
-            neuron.threshold &&
-          neuron.refractory <= 0
-        ) {
-
-          fireNeuron(index);
-
-        }
-
-
-        /*
-          Fade firing glow.
-        */
-
-        neuron.activity *=
-          Math.pow(
-            0.92,
-            dt / 16
-          );
-
-      }
-    );
-
-
-    /* =========================
-       MOVE ELECTRICAL SIGNALS
-    ========================== */
-
-    signals.forEach(signal => {
-
-      signal.progress +=
-        signal.speed * dt;
-
-
-      const connection =
-        connections[
-          signal.connectionIndex
-        ];
-
-
-      if (!connection) return;
-
-
-      if (
-        signal.progress >= 1
-      ) {
-
-        const target =
-          neurons[signal.to];
-
-
-        if (
-          target.refractory <= 0
-        ) {
-
-          target.potential +=
-            signal.strength * 0.85;
-
-          target.activity =
-            Math.min(
-              target.activity + 0.35,
-              1
-            );
-
-        }
-
-      }
-
+      speed:
+        0.012 +
+        Math.random() * 0.014
     });
-
-
-    signals =
-      signals.filter(
-        signal =>
-          signal.progress < 1
-      );
-
-
-    /*
-      Fade active axons.
-    */
-
-    connections.forEach(
-      connection => {
-
-        connection.activity *=
-          Math.pow(
-            0.94,
-            dt / 16
-          );
-
-      }
-    );
-
   }
 
+  let lastSpawn = 0;
 
-  /* =========================
-     DRAW CURVED AXONS
-  ========================== */
+  function draw(ts){
 
-  function drawConnections() {
+    ctx.clearRect(0,0,w,h);
 
-    connections.forEach(
-      connection => {
+    const links =
+      nearestLinks();
 
-        const a =
-          neurons[connection.from];
+    const t =
+      ts / 1000;
 
-        const b =
-          neurons[connection.to];
+    for(const n of nodes){
 
-        const active =
-          connection.activity;
+      n.x += n.vx;
+      n.y += n.vy;
 
-
-        /*
-          Main axon.
-        */
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-          a.x,
-          a.y
-        );
-
-        ctx.quadraticCurveTo(
-          connection.controlX,
-          connection.controlY,
-          b.x,
-          b.y
-        );
-
-
-        ctx.strokeStyle =
-          `rgba(
-            60,
-            140,
-            255,
-            ${0.12 + active * 0.6}
-          )`;
-
-
-        ctx.lineWidth =
-          0.8 +
-          active * 2;
-
-
-        if (active > 0.1) {
-
-          ctx.shadowBlur =
-            8 + active * 15;
-
-          ctx.shadowColor =
-            "#ff4d00";
-
-        }
-
-
-        ctx.stroke();
-
-        ctx.shadowBlur = 0;
-
-
-        /*
-          Secondary thin branch
-          makes connection look
-          more biological.
-        */
-
-        if (
-          Math.random() < 0.015
-        ) {
-
-          const t =
-            0.35 +
-            Math.random() * 0.3;
-
-          const p =
-            bezierPoint(
-              t,
-              a,
-              {
-                x:
-                  connection.controlX,
-                y:
-                  connection.controlY
-              },
-              b
-            );
-
-
-          ctx.beginPath();
-
-          ctx.moveTo(
-            p.x,
-            p.y
-          );
-
-          ctx.lineTo(
-            p.x +
-              (Math.random() - 0.5) * 40,
-
-            p.y +
-              (Math.random() - 0.5) * 40
-          );
-
-          ctx.strokeStyle =
-            "rgba(80,160,255,0.18)";
-
-          ctx.lineWidth = 0.6;
-
-          ctx.stroke();
-
-        }
-
+      if(
+        n.x < 0 ||
+        n.x > w
+      ){
+        n.vx *= -1;
       }
-    );
 
-  }
+      if(
+        n.y < 0 ||
+        n.y > h
+      ){
+        n.vy *= -1;
+      }
 
+      if(n.glow > 0){
+        n.glow -= 0.02;
+      }
+    }
 
-  /* =========================
-     DRAW MOVING SPIKES
-  ========================== */
+    const alphaScale =
+      opts.lineAlphaScale || 0.5;
 
-  function drawSignals() {
-
-    signals.forEach(signal => {
-
-      const connection =
-        connections[
-          signal.connectionIndex
-        ];
+    for(const l of links){
 
       const a =
-        neurons[signal.from];
+        nodes[l.a];
 
       const b =
-        neurons[signal.to];
+        nodes[l.b];
 
+      const alpha =
+        (1 - l.dist / opts.linkDist) *
+        alphaScale;
 
-      if (
-        !connection ||
-        !a ||
-        !b
-      ) return;
-
-
-      /*
-        Reverse curve when
-        travelling backwards.
-      */
-
-      const control = {
-        x:
-          connection.controlX,
-
-        y:
-          connection.controlY
-      };
-
-
-      const point =
-        bezierPoint(
-          signal.progress,
-          a,
-          control,
-          b
+      ctx.strokeStyle =
+        opts.lineColor.replace(
+          'ALPHA',
+          alpha.toFixed(3)
         );
 
+      ctx.lineWidth =
+        glow ? 1.3 : 1;
 
-      /*
-        Bright electrical glow.
-      */
+      if(glow){
 
-      ctx.shadowBlur = 25;
+        ctx.shadowBlur = 5;
 
-      ctx.shadowColor =
-        "#ff3b00";
+        ctx.shadowColor =
+          opts.lineColor.replace(
+            'ALPHA',
+            '0.5'
+          );
+      }
 
+      ctx.beginPath();
+
+      ctx.moveTo(
+        a.x,
+        a.y
+      );
+
+      ctx.lineTo(
+        b.x,
+        b.y
+      );
+
+      ctx.stroke();
+
+      if(glow){
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    if(
+      !reduceMotion &&
+      ts - lastSpawn > opts.pulseRate
+    ){
+
+      spawnPulse(links);
+
+      lastSpawn = ts;
+    }
+
+    pulses.forEach(p => {
+
+      const a =
+        nodes[p.a];
+
+      const b =
+        nodes[p.b];
+
+      if(!a || !b) return;
+
+      p.t += p.speed;
+
+      const x =
+        a.x +
+        (b.x - a.x) * p.t;
+
+      const y =
+        a.y +
+        (b.y - a.y) * p.t;
+
+      if(glow){
+
+        ctx.shadowBlur = 9;
+
+        ctx.shadowColor =
+          opts.pulseColor;
+      }
 
       ctx.beginPath();
 
       ctx.arc(
-        point.x,
-        point.y,
-        3 +
-          signal.strength * 3,
-        0,
-        Math.PI * 2
-      );
-
-
-      ctx.fillStyle =
-        "#ff6a00";
-
-      ctx.fill();
-
-
-      /*
-        White hot center.
-      */
-
-      ctx.shadowBlur = 10;
-
-      ctx.beginPath();
-
-      ctx.arc(
-        point.x,
-        point.y,
-        1.8,
+        x,
+        y,
+        2.4,
         0,
         Math.PI * 2
       );
 
       ctx.fillStyle =
-        "#ffffff";
+        opts.pulseColor;
 
       ctx.fill();
 
-      ctx.shadowBlur = 0;
+      if(glow){
+        ctx.shadowBlur = 0;
+      }
+
+      if(p.t >= 1){
+        b.glow = 1;
+      }
 
     });
 
-  }
+    pulses =
+      pulses.filter(
+        p => p.t < 1
+      );
 
+    for(const n of nodes){
 
-  /* =========================
-     DRAW NEURONS
-  ========================== */
+      const idlePulse =
+        n.hot
+          ? 0.55 +
+            0.45 *
+            Math.sin(
+              t * n.idleSpeed +
+              n.phase
+            )
+          : 0;
 
-  function drawNeurons() {
+      const r =
+        n.r +
+        n.glow * 2.2 +
+        (n.hot ? idlePulse * 1.4 : 0);
 
-    neurons.forEach(
-      neuron => {
+      const color =
+        n.glow > 0
+          ? opts.pulseColor
+          : (
+              n.hot
+                ? hotColor
+                : opts.nodeColor
+            );
 
-        const activity =
-          neuron.activity;
-
-
-        const potential =
-          neuron.potential /
-          neuron.threshold;
-
-
-        /*
-          Outer membrane glow.
-        */
-
-        ctx.beginPath();
-
-        ctx.arc(
-          neuron.x,
-          neuron.y,
-          neuron.radius +
-            5 +
-            activity * 12,
-          0,
-          Math.PI * 2
-        );
-
-
-        ctx.fillStyle =
-          `rgba(
-            40,
-            130,
-            255,
-            ${0.04 + activity * 0.15}
-          )`;
-
-        ctx.fill();
-
-
-        /*
-          Neuron body.
-        */
+      if(glow){
 
         ctx.shadowBlur =
-          8 + activity * 30;
-
+          n.hot
+            ? 12 + idlePulse * 8
+            : 4;
 
         ctx.shadowColor =
-          activity > 0.2
-            ? "#ff3b00"
-            : "#2a8cff";
-
-
-        ctx.beginPath();
-
-        ctx.arc(
-          neuron.x,
-          neuron.y,
-          neuron.radius +
-            activity * 4,
-          0,
-          Math.PI * 2
-        );
-
-
-        if (activity > 0.35) {
-
-          ctx.fillStyle =
-            "#ff3b00";
-
-        } else if (
-          potential > 0.65
-        ) {
-
-          ctx.fillStyle =
-            "#ffb000";
-
-        } else {
-
-          ctx.fillStyle =
-            "rgba(40,130,255,0.75)";
-
-        }
-
-
-        ctx.fill();
-
-        ctx.shadowBlur = 0;
-
-
-        /*
-          Membrane ring.
-        */
-
-        ctx.beginPath();
-
-        ctx.arc(
-          neuron.x,
-          neuron.y,
-          neuron.radius +
-            2 +
-            activity * 6,
-          0,
-          Math.PI * 2
-        );
-
-
-        ctx.strokeStyle =
-          `rgba(
-            120,
-            190,
-            255,
-            ${0.25 + activity * 0.7}
-          )`;
-
-        ctx.lineWidth = 1;
-
-        ctx.stroke();
-
+          color;
       }
-    );
 
+      ctx.beginPath();
+
+      ctx.arc(
+        n.x,
+        n.y,
+        r,
+        0,
+        Math.PI * 2
+      );
+
+      ctx.fillStyle =
+        color;
+
+      ctx.globalAlpha =
+        n.glow > 0
+          ? 0.95
+          : (
+              n.hot
+                ? 0.75 +
+                  idlePulse * 0.25
+                : 0.85
+            );
+
+      ctx.fill();
+
+      ctx.globalAlpha = 1;
+
+      if(glow){
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    if(!reduceMotion){
+      requestAnimationFrame(draw);
+    }
   }
-
-
-  /* =========================
-     DRAW FRAME
-  ========================== */
-
-  function draw() {
-
-    ctx.clearRect(
-      0,
-      0,
-      w,
-      h
-    );
-
-    drawConnections();
-
-    drawSignals();
-
-    drawNeurons();
-
-  }
-
-
-  /* =========================
-     ANIMATION LOOP
-  ========================== */
-
-  function animate(time) {
-
-    const dt =
-      lastTime
-        ? Math.min(
-            time - lastTime,
-            50
-          )
-        : 16;
-
-
-    lastTime = time;
-
-    update(
-      dt,
-      time
-    );
-
-    draw();
-
-    requestAnimationFrame(
-      animate
-    );
-
-  }
-
 
   window.addEventListener(
-    "resize",
+    'resize',
     resize
   );
 
-
   resize();
 
-  requestAnimationFrame(
-    animate
-  );
-
+  requestAnimationFrame(draw);
 }
   
   function initStars(canvasId, count){
