@@ -706,139 +706,612 @@
 
   // Generic neural-network canvas renderer.
   // opts: nodeCount, linkDist, speed, nodeColor, lineColor, pulseColor, pulseRate
-  function initNetwork(canvasId, opts){
-    const canvas = document.getElementById(canvasId);
-    if(!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let w, h, dpr;
-    let nodes = [];
-    let pulses = [];
-    const hotColor = opts.hotColor || null;
-    const hotShare = opts.hotShare || 0.16;
-    const glow = !!opts.glow;
+  // function initNetwork(canvasId, opts){
+  //   const canvas = document.getElementById(canvasId);
+  //   if(!canvas) return;
+  //   const ctx = canvas.getContext('2d');
+  //   let w, h, dpr;
+  //   let nodes = [];
+  //   let pulses = [];
+  //   const hotColor = opts.hotColor || null;
+  //   const hotShare = opts.hotShare || 0.16;
+  //   const glow = !!opts.glow;
 
-    function resize(){
-      const rect = canvas.parentElement.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = rect.width; h = rect.height;
-      canvas.width = w * dpr; canvas.height = h * dpr;
-      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-      seed();
-    }
+  //   function resize(){
+  //     const rect = canvas.parentElement.getBoundingClientRect();
+  //     dpr = Math.min(window.devicePixelRatio || 1, 2);
+  //     w = rect.width; h = rect.height;
+  //     canvas.width = w * dpr; canvas.height = h * dpr;
+  //     canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+  //     ctx.setTransform(dpr,0,0,dpr,0,0);
+  //     seed();
+  //   }
 
-    function seed(){
-      nodes = [];
-      const count = opts.nodeCount;
-      for(let i=0;i<count;i++){
-        const isHot = hotColor && Math.random() < hotShare;
-        nodes.push({
-          x: Math.random()*w,
-          y: Math.random()*h,
-          vx: (Math.random()-0.5)*opts.speed,
-          vy: (Math.random()-0.5)*opts.speed,
-          r: (isHot ? 2.1 : 1.6) + Math.random()*1.8,
-          glow: 0,
-          hot: isHot,
-          phase: Math.random()*Math.PI*2,
-          idleSpeed: 0.5 + Math.random()*0.7
-        });
-      }
-      pulses = [];
-    }
+  //   function seed(){
+  //     nodes = [];
+  //     const count = opts.nodeCount;
+  //     for(let i=0;i<count;i++){
+  //       const isHot = hotColor && Math.random() < hotShare;
+  //       nodes.push({
+  //         x: Math.random()*w,
+  //         y: Math.random()*h,
+  //         vx: (Math.random()-0.5)*opts.speed,
+  //         vy: (Math.random()-0.5)*opts.speed,
+  //         r: (isHot ? 2.1 : 1.6) + Math.random()*1.8,
+  //         glow: 0,
+  //         hot: isHot,
+  //         phase: Math.random()*Math.PI*2,
+  //         idleSpeed: 0.5 + Math.random()*0.7
+  //       });
+  //     }
+  //     pulses = [];
+  //   }
 
-    function nearestLinks(){
-      const links = [];
-      for(let i=0;i<nodes.length;i++){
-        for(let j=i+1;j<nodes.length;j++){
-          const dx = nodes[i].x-nodes[j].x, dy = nodes[i].y-nodes[j].y;
-          const d = Math.sqrt(dx*dx+dy*dy);
-          if(d < opts.linkDist) links.push({a:i,b:j,dist:d});
-        }
-      }
-      return links;
-    }
+  //   function nearestLinks(){
+  //     const links = [];
+  //     for(let i=0;i<nodes.length;i++){
+  //       for(let j=i+1;j<nodes.length;j++){
+  //         const dx = nodes[i].x-nodes[j].x, dy = nodes[i].y-nodes[j].y;
+  //         const d = Math.sqrt(dx*dx+dy*dy);
+  //         if(d < opts.linkDist) links.push({a:i,b:j,dist:d});
+  //       }
+  //     }
+  //     return links;
+  //   }
 
-    function spawnPulse(links){
-      if(!links.length) return;
-      const l = links[Math.floor(Math.random()*links.length)];
-      pulses.push({a:l.a, b:l.b, t:0, speed: 0.012 + Math.random()*0.014});
-    }
+  //   function spawnPulse(links){
+  //     if(!links.length) return;
+  //     const l = links[Math.floor(Math.random()*links.length)];
+  //     pulses.push({a:l.a, b:l.b, t:0, speed: 0.012 + Math.random()*0.014});
+  //   }
 
-    let lastSpawn = 0;
-    function draw(ts){
-      ctx.clearRect(0,0,w,h);
-      const links = nearestLinks();
-      const t = ts/1000;
+  //   let lastSpawn = 0;
+  //   function draw(ts){
+  //     ctx.clearRect(0,0,w,h);
+  //     const links = nearestLinks();
+  //     const t = ts/1000;
 
-      for(const n of nodes){
-        n.x += n.vx; n.y += n.vy;
-        if(n.x < 0 || n.x > w) n.vx *= -1;
-        if(n.y < 0 || n.y > h) n.vy *= -1;
-        if(n.glow > 0) n.glow -= 0.02;
-      }
+  //     for(const n of nodes){
+  //       n.x += n.vx; n.y += n.vy;
+  //       if(n.x < 0 || n.x > w) n.vx *= -1;
+  //       if(n.y < 0 || n.y > h) n.vy *= -1;
+  //       if(n.glow > 0) n.glow -= 0.02;
+  //     }
 
-      const alphaScale = opts.lineAlphaScale || 0.5;
-      for(const l of links){
-        const a = nodes[l.a], b = nodes[l.b];
-        const alpha = (1 - l.dist/opts.linkDist) * alphaScale;
-        ctx.strokeStyle = opts.lineColor.replace('ALPHA', alpha.toFixed(3));
-        ctx.lineWidth = glow ? 1.3 : 1;
-        if(glow){ ctx.shadowBlur = 5; ctx.shadowColor = opts.lineColor.replace('ALPHA','0.5'); }
-        ctx.beginPath();
-        ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
-        ctx.stroke();
-        if(glow) ctx.shadowBlur = 0;
-      }
+  //     const alphaScale = opts.lineAlphaScale || 0.5;
+  //     for(const l of links){
+  //       const a = nodes[l.a], b = nodes[l.b];
+  //       const alpha = (1 - l.dist/opts.linkDist) * alphaScale;
+  //       ctx.strokeStyle = opts.lineColor.replace('ALPHA', alpha.toFixed(3));
+  //       ctx.lineWidth = glow ? 1.3 : 1;
+  //       if(glow){ ctx.shadowBlur = 5; ctx.shadowColor = opts.lineColor.replace('ALPHA','0.5'); }
+  //       ctx.beginPath();
+  //       ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+  //       ctx.stroke();
+  //       if(glow) ctx.shadowBlur = 0;
+  //     }
 
-      if(!reduceMotion && ts - lastSpawn > opts.pulseRate){
-        spawnPulse(links);
-        lastSpawn = ts;
-      }
+  //     if(!reduceMotion && ts - lastSpawn > opts.pulseRate){
+  //       spawnPulse(links);
+  //       lastSpawn = ts;
+  //     }
 
-      pulses.forEach(p=>{
-        const a = nodes[p.a], b = nodes[p.b];
-        if(!a || !b) return;
-        p.t += p.speed;
-        const x = a.x + (b.x-a.x)*p.t;
-        const y = a.y + (b.y-a.y)*p.t;
-        if(glow){ ctx.shadowBlur = 9; ctx.shadowColor = opts.pulseColor; }
-        ctx.beginPath();
-        ctx.arc(x,y,2.4,0,Math.PI*2);
-        ctx.fillStyle = opts.pulseColor;
-        ctx.fill();
-        if(glow) ctx.shadowBlur = 0;
-        if(p.t >= 1){ b.glow = 1; }
-      });
-      pulses = pulses.filter(p=>p.t < 1);
+  //     pulses.forEach(p=>{
+  //       const a = nodes[p.a], b = nodes[p.b];
+  //       if(!a || !b) return;
+  //       p.t += p.speed;
+  //       const x = a.x + (b.x-a.x)*p.t;
+  //       const y = a.y + (b.y-a.y)*p.t;
+  //       if(glow){ ctx.shadowBlur = 9; ctx.shadowColor = opts.pulseColor; }
+  //       ctx.beginPath();
+  //       ctx.arc(x,y,2.4,0,Math.PI*2);
+  //       ctx.fillStyle = opts.pulseColor;
+  //       ctx.fill();
+  //       if(glow) ctx.shadowBlur = 0;
+  //       if(p.t >= 1){ b.glow = 1; }
+  //     });
+  //     pulses = pulses.filter(p=>p.t < 1);
 
-      for(const n of nodes){
-        const idlePulse = n.hot ? (0.55 + 0.45*Math.sin(t*n.idleSpeed + n.phase)) : 0;
-        const r = n.r + n.glow*2.2 + (n.hot ? idlePulse*1.4 : 0);
-        const color = n.glow > 0 ? opts.pulseColor : (n.hot ? hotColor : opts.nodeColor);
-        if(glow){
-          ctx.shadowBlur = n.hot ? 12+idlePulse*8 : 4;
-          ctx.shadowColor = color;
-        }
-        ctx.beginPath();
-        ctx.arc(n.x,n.y,r,0,Math.PI*2);
-        ctx.fillStyle = color;
-        ctx.globalAlpha = n.glow > 0 ? 0.95 : (n.hot ? 0.75+idlePulse*0.25 : 0.85);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-        if(glow) ctx.shadowBlur = 0;
-      }
+  //     for(const n of nodes){
+  //       const idlePulse = n.hot ? (0.55 + 0.45*Math.sin(t*n.idleSpeed + n.phase)) : 0;
+  //       const r = n.r + n.glow*2.2 + (n.hot ? idlePulse*1.4 : 0);
+  //       const color = n.glow > 0 ? opts.pulseColor : (n.hot ? hotColor : opts.nodeColor);
+  //       if(glow){
+  //         ctx.shadowBlur = n.hot ? 12+idlePulse*8 : 4;
+  //         ctx.shadowColor = color;
+  //       }
+  //       ctx.beginPath();
+  //       ctx.arc(n.x,n.y,r,0,Math.PI*2);
+  //       ctx.fillStyle = color;
+  //       ctx.globalAlpha = n.glow > 0 ? 0.95 : (n.hot ? 0.75+idlePulse*0.25 : 0.85);
+  //       ctx.fill();
+  //       ctx.globalAlpha = 1;
+  //       if(glow) ctx.shadowBlur = 0;
+  //     }
 
-      if(!reduceMotion){
-        requestAnimationFrame(draw);
-      }
-    }
+  //     if(!reduceMotion){
+  //       requestAnimationFrame(draw);
+  //     }
+  //   }
 
-    window.addEventListener('resize', resize);
-    resize();
-    requestAnimationFrame(draw);
+  //   window.addEventListener('resize', resize);
+  //   resize();
+  //   requestAnimationFrame(draw);
+  // }
+  function initNetwork(canvasId, opts) {
+  const canvas = document.getElementById(canvasId);
+
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+
+  let w, h, dpr;
+  let neurons = [];
+  let synapses = [];
+  let spikes = [];
+  let lastTime = 0;
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    w = rect.width;
+    h = rect.height;
+
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    createBrain();
   }
 
+  function createBrain() {
+    neurons = [];
+    synapses = [];
+    spikes = [];
+
+    const count = opts.nodeCount || 60;
+
+    /*
+      Create neuron positions.
+
+      Instead of every neuron floating randomly,
+      neurons remain in a stable network structure.
+    */
+
+    for (let i = 0; i < count; i++) {
+
+      const margin = 30;
+
+      neurons.push({
+        x: margin + Math.random() * (w - margin * 2),
+        y: margin + Math.random() * (h - margin * 2),
+
+        radius: 1.8 + Math.random() * 1.8,
+
+        // Membrane potential
+        potential: Math.random() * 0.3,
+
+        // Firing threshold
+        threshold: 1,
+
+        // Refractory state
+        refractory: 0,
+
+        // Visual firing intensity
+        activity: 0,
+
+        // Slight biological variation
+        leak: 0.008 + Math.random() * 0.01
+      });
+    }
+
+    /*
+      Create synaptic connections.
+
+      Each neuron connects mainly to nearby neurons.
+      This looks more like a structured neural network.
+    */
+
+    for (let i = 0; i < neurons.length; i++) {
+
+      const nearby = [];
+
+      for (let j = 0; j < neurons.length; j++) {
+
+        if (i === j) continue;
+
+        const dx = neurons[i].x - neurons[j].x;
+        const dy = neurons[i].y - neurons[j].y;
+
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < opts.linkDist) {
+          nearby.push({
+            index: j,
+            distance: distance
+          });
+        }
+      }
+
+      nearby
+        .sort((a, b) => a.distance - b.distance)
+        .slice(0, 3 + Math.floor(Math.random() * 3))
+        .forEach(connection => {
+
+          if (connection.index > i) {
+
+            synapses.push({
+              from: i,
+              to: connection.index,
+
+              // Synaptic strength
+              weight: 0.35 + Math.random() * 0.45
+            });
+
+          }
+
+        });
+
+    }
+  }
+
+
+  /*
+    Fire a neuron.
+
+    A neuron spikes when its membrane potential
+    reaches its threshold.
+  */
+
+  function fireNeuron(index) {
+
+    const neuron = neurons[index];
+
+    if (neuron.refractory > 0) return;
+
+    neuron.potential = 0;
+    neuron.refractory = 500;
+    neuron.activity = 1;
+
+    /*
+      Send spike signals through outgoing synapses.
+    */
+
+    synapses.forEach(synapse => {
+
+      if (synapse.from === index) {
+
+        spikes.push({
+          from: synapse.from,
+          to: synapse.to,
+
+          progress: 0,
+
+          speed: 0.008 + Math.random() * 0.012,
+
+          strength: synapse.weight
+        });
+
+      }
+
+      if (synapse.to === index) {
+
+        spikes.push({
+          from: synapse.to,
+          to: synapse.from,
+
+          progress: 0,
+
+          speed: 0.008 + Math.random() * 0.012,
+
+          strength: synapse.weight
+        });
+
+      }
+
+    });
+
+  }
+
+
+  function stimulateNetwork() {
+
+    /*
+      External/random input.
+
+      This represents background neural activity.
+    */
+
+    const randomNeuron =
+      Math.floor(Math.random() * neurons.length);
+
+    const neuron = neurons[randomNeuron];
+
+    if (neuron.refractory <= 0) {
+      neuron.potential += 0.35 + Math.random() * 0.4;
+    }
+
+  }
+
+
+  function update(dt) {
+
+    /*
+      Random sensory/background input
+    */
+
+    if (Math.random() < 0.08) {
+      stimulateNetwork();
+    }
+
+
+    neurons.forEach((neuron, index) => {
+
+      /*
+        Refractory period after firing.
+      */
+
+      if (neuron.refractory > 0) {
+
+        neuron.refractory -= dt;
+
+        if (neuron.refractory < 0) {
+          neuron.refractory = 0;
+        }
+
+      }
+
+
+      /*
+        Membrane potential leak.
+
+        Neurons gradually return toward resting state.
+      */
+
+      if (neuron.refractory <= 0) {
+
+        neuron.potential -= neuron.leak * dt / 16;
+
+        if (neuron.potential < 0) {
+          neuron.potential = 0;
+        }
+
+      }
+
+
+      /*
+        Fire when threshold is reached.
+      */
+
+      if (
+        neuron.potential >= neuron.threshold &&
+        neuron.refractory <= 0
+      ) {
+        fireNeuron(index);
+      }
+
+
+      /*
+        Visual activity fades after spike.
+      */
+
+      neuron.activity *= 0.94;
+
+    });
+
+
+    /*
+      Move spikes through synapses.
+    */
+
+    spikes.forEach(spike => {
+
+      spike.progress += spike.speed * dt / 16;
+
+      if (spike.progress >= 1) {
+
+        const target = neurons[spike.to];
+
+        /*
+          Incoming synaptic signal
+        */
+
+        if (target.refractory <= 0) {
+
+          target.potential += spike.strength;
+
+          target.activity = Math.min(
+            target.activity + 0.5,
+            1
+          );
+
+        }
+
+      }
+
+    });
+
+
+    spikes = spikes.filter(
+      spike => spike.progress < 1
+    );
+
+  }
+
+
+  function draw() {
+
+    ctx.clearRect(0, 0, w, h);
+
+
+    /*
+      Draw synapses
+    */
+
+    synapses.forEach(synapse => {
+
+      const a = neurons[synapse.from];
+      const b = neurons[synapse.to];
+
+      ctx.beginPath();
+
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+
+      const active =
+        Math.max(a.activity, b.activity);
+
+      ctx.strokeStyle =
+        `rgba(80, 140, 255, ${0.08 + active * 0.35})`;
+
+      ctx.lineWidth =
+        0.6 + active * 0.8;
+
+      ctx.stroke();
+
+    });
+
+
+    /*
+      Draw travelling spikes.
+    */
+
+    spikes.forEach(spike => {
+
+      const a = neurons[spike.from];
+      const b = neurons[spike.to];
+
+      const x =
+        a.x + (b.x - a.x) * spike.progress;
+
+      const y =
+        a.y + (b.y - a.y) * spike.progress;
+
+
+      /*
+        Glow around electrical spike
+      */
+
+      ctx.shadowBlur = 16;
+      ctx.shadowColor = "#ff3b3b";
+
+      ctx.beginPath();
+
+      ctx.arc(
+        x,
+        y,
+        2.5 + spike.strength * 2,
+        0,
+        Math.PI * 2
+      );
+
+      ctx.fillStyle = "#ff3b3b";
+
+      ctx.fill();
+
+      ctx.shadowBlur = 0;
+
+    });
+
+
+    /*
+      Draw neurons.
+    */
+
+    neurons.forEach(neuron => {
+
+      const firing = neuron.activity;
+
+      const radius =
+        neuron.radius + firing * 3;
+
+
+      /*
+        Neuron glow increases during firing.
+      */
+
+      if (firing > 0.05) {
+
+        ctx.shadowBlur =
+          8 + firing * 20;
+
+        ctx.shadowColor = "#ff3b3b";
+
+      }
+
+
+      ctx.beginPath();
+
+      ctx.arc(
+        neuron.x,
+        neuron.y,
+        radius,
+        0,
+        Math.PI * 2
+      );
+
+
+      /*
+        Color changes based on activity.
+      */
+
+      if (firing > 0.25) {
+
+        ctx.fillStyle = "#ff3b3b";
+
+      } else {
+
+        ctx.fillStyle =
+          "rgba(70, 220, 140, 0.85)";
+
+      }
+
+
+      ctx.fill();
+
+      ctx.shadowBlur = 0;
+
+    });
+
+  }
+
+
+  function animate(timestamp) {
+
+    const dt =
+      lastTime
+        ? Math.min(timestamp - lastTime, 50)
+        : 16;
+
+    lastTime = timestamp;
+
+    update(dt);
+
+    draw();
+
+    if (!reduceMotion) {
+      requestAnimationFrame(animate);
+    }
+
+  }
+
+
+  window.addEventListener(
+    "resize",
+    resize
+  );
+
+  resize();
+
+  requestAnimationFrame(animate);
+
+  }
   function initStars(canvasId, count){
     const canvas = document.getElementById(canvasId);
     if(!canvas) return;
